@@ -1,0 +1,7 @@
+﻿CREATE TABLE [dbo].[Activity]
+(
+	[ActivityId] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY, 
+    [Name] NVARCHAR(50) NOT NULL, 
+    [Description] NVARCHAR(255) NOT NULL, 
+    [ImageURL] NVARCHAR(255) NULL
+)
