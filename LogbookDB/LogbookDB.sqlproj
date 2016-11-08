@@ -75,4 +75,7 @@
   <ItemGroup>
     <RefactorLog Include="LogbookDB.refactorlog" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="local.publish.xml" />
+  </ItemGroup>
 </Project>
