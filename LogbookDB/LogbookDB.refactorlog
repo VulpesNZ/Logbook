@@ -105,4 +105,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="IndustryId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="bd1e102a-f4de-472e-8abe-1fcba110a7a3" ChangeDateTime="11/13/2016 02:18:39">
+    <Property Name="ElementName" Value="[dbo].[Request].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Request]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="RequestId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="0938b2c4-8a2f-4a84-8ef7-1b6439a974f9" ChangeDateTime="11/13/2016 02:23:58">
+    <Property Name="ElementName" Value="[dbo].[Request].[ExpiryTime]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Request]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Expires" />
+  </Operation>
 </Operations>

@@ -12,7 +12,14 @@ namespace LogbookUI
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+            routes.MapRoute(
+                name: "PasswordReset",
+                url: "Account/PasswordReset/{requestId}",
+                defaults: new { controller = "Account", action = "PasswordReset" }
+            );
 
+
+            // Default always goes last
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
