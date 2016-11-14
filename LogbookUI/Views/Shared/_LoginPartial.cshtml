@@ -6,8 +6,8 @@
     @Html.AntiForgeryToken()
 
     <ul class="nav navbar-nav navbar-right">
-            @Html.ActionLink(User.Identity.GetUserName(), "Index", "Manage", routeValues: new { area = "" }, htmlAttributes: new { title = "Manage" })
-       (<a href="javascript:sessionStorage.removeItem('accessToken');$('#logoutForm').submit();">Log off</a>)
+            @Html.ActionLink(User.Identity.GetUserName(), "Account", "Manage", routeValues: new { area = "" }, htmlAttributes: new { title = "Manage" })
+       (<a href="javascript:sessionStorage.removeItem('accessToken');$('#logoutForm').submit();">Sign out</a>)
     </ul>
     }
 }
@@ -15,6 +15,6 @@ else
 {
     <ul class="nav navbar-nav navbar-right">
         <li>@Html.ActionLink("Register", "Register", "Account", routeValues: new { area = "" }, htmlAttributes: new { id = "registerLink" })</li>
-        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: new { area = "" }, htmlAttributes: new { id = "loginLink" })</li>
+        <li>@Html.ActionLink("Sign in", "Login", "Account", routeValues: new { area = "" }, htmlAttributes: new { id = "loginLink" })</li>
     </ul>
 }

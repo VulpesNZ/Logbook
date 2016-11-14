@@ -48,6 +48,7 @@
     <Compile Include="DataAccess.cs" />
     <Compile Include="DTO\Request.cs" />
     <Compile Include="DTO\User.cs" />
+    <Compile Include="Mailer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -73,7 +73,7 @@ namespace LogbookUI.Controllers
             {
                 return Redirect(returnUrl);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Home", "Home");
         }
 
         private Task<string> TryLogin(string email, string pass)
@@ -175,10 +175,10 @@ namespace LogbookUI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
+            ModelState.AddModelError("", "An email has been sent to the specified address with instructions on how to reset your account password.");
             var user = DataAccess.GetUser(model.Email);
             if (user == null)
             {
-                ModelState.AddModelError("", "An email has been sent to the address with instructions on how to reset your password.");
             }
             else
             {
@@ -187,7 +187,7 @@ namespace LogbookUI.Controllers
                     RequestType = "REQUEST/PASSWORDRESET",
                     UserId = user.UserId
                 });
-                ModelState.AddModelError("", "RequestId = " + requestGuid);
+                Mailer.SendMessage("support@outdoorlogbook.com", user.Email, "OutdoorLogbook - Password reset instructions", "http://localhost:53279/Account/PasswordReset/" + requestGuid);
             }
             return View(model);
         }
@@ -207,7 +207,7 @@ namespace LogbookUI.Controllers
             var validRequest = DataAccess.CheckRequest(model.RequestId, model.Email);
             if (!validRequest)
             {
-                ModelState.AddModelError("", "Request has expired, been used, or is not valid for this email address.  Please re-request your password reset <a href=\"account/forgotpassword\">here</a>.");
+                ModelState.AddModelError("", "Request has expired, been used, or is not valid for this email address.  You will need to submit another password reset request.");
                 return View(model);
             }
             byte[] salt;
@@ -221,6 +221,8 @@ namespace LogbookUI.Controllers
 
             DataAccess.ResetPassword(user);
             DataAccess.ConsumeRequest(model.RequestId);
+            ModelState.AddModelError("", "Your password has been successfully reset.  Please login to access your account.");
+
             return View(model);
         }
 

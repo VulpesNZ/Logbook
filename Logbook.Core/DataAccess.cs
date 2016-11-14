@@ -62,7 +62,6 @@ namespace Logbook.Core
 
         public static bool CheckRequest(Guid requestId, string email)
         {
-
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
             {
                 var request =
