@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Logbook.Core.DTO
 {
-    public class Request
+    public class RequestDTO
     {
         public Guid RequestId { get; set; }
         public Guid UserId { get; set; }

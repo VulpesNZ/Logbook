@@ -12,15 +12,15 @@ namespace Logbook.Core
 {
     public static class DataAccess
     {
-        public static User GetUser(string email)
+        public static UserDTO GetUser(string email)
         {
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
             {
-                return conn.Query<User>("SELECT TOP 1 * FROM [User] WHERE Email = '" + email + "'").FirstOrDefault();
+                return conn.Query<UserDTO>("SELECT TOP 1 * FROM [User] WHERE Email = '" + email + "'").FirstOrDefault();
             }
         }
 
-        public static bool CreateUser(User user)
+        public static bool CreateUser(UserDTO user)
         {
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
             {
@@ -32,7 +32,7 @@ namespace Logbook.Core
             }
         }
 
-        public static Guid GenerateRequest(Request request)
+        public static Guid GenerateRequest(RequestDTO request)
         {
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
             {
@@ -44,7 +44,7 @@ namespace Logbook.Core
             }
         }
 
-        public static void ResetPassword(User user)
+        public static void ResetPassword(UserDTO user)
         {
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
             {
@@ -65,7 +65,7 @@ namespace Logbook.Core
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
             {
                 var request =
-                    conn.Query<Request>(
+                    conn.Query<RequestDTO>(
                         string.Format(
                             "SELECT * FROM Request " +
                             "JOIN [User] ON [User].UserId = Request.UserId " +
@@ -74,6 +74,35 @@ namespace Logbook.Core
                             "AND Request.Expires > GETDATE()" +
                             "AND Consumed = 0", email, requestId)).FirstOrDefault();
                 return request != null;
+            }
+        }
+
+        public static List<ActivityDTO> GetActivities()
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                return conn.Query<ActivityDTO>("SELECT * FROM Activity ORDER BY Name").ToList();
+            }
+        }
+
+        public static void CreateLogbook(LogbookDTO logbook)
+        {
+            logbook.LogbookId = Guid.NewGuid();
+
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                conn.Execute("INSERT INTO Logbook (LogbookId, Name, DefaultActivityId, CreatedBy, UpdatedBy, Status) " +
+                                       "OUTPUT inserted.LogbookId " +
+                                       "VALUES (@LogbookId, @Name, @DefaultActivityId, @CreatedBy, @UpdatedBy, @Status)",
+                    logbook);
+            }
+        }
+
+        public static LogbookDTO GetLogbook(Guid logbookId)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                return conn.Query<LogbookDTO>("SELECT TOP 1 * FROM Logbook WHERE LogbookId = @LogbookId", new { LogbookId = logbookId }).SingleOrDefault();
             }
         }
     }

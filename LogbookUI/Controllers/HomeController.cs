@@ -19,7 +19,7 @@ namespace LogbookUI.Controllers
         [Authorize]
         public ActionResult Home()
         {
-            var model = new HomeViewModel() { ActiveLogbookName = "Test" };
+            var model = new HomeViewModel() { ActiveLogbookName = string.Empty };
             return View(model);
         }
 

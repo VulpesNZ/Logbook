@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Logbook.Core.DTO
 {
-    public class User
+    public class UserDTO
     {
         public Guid UserId { get; set; }
 
@@ -21,13 +21,5 @@ namespace Logbook.Core.DTO
         public string Location { get; set; }
 
         public string Status { get; set; }
-
-    //    [UserId] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT NEWID(), 
-    //[Email] NVARCHAR(255) NOT NULL,
-    //[PasswordHash] BINARY(32)  NULL, 
-    //[PasswordSalt] BINARY(32)  NULL, 
-    //[Name] NVARCHAR(255) NULL, 
-    //[Location] NVARCHAR(255) NOT NULL,
-    //[Status] NVARCHAR(255) NOT NULL
     }
 }

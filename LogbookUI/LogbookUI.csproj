@@ -167,6 +167,7 @@
     <Content Include="Views\Account\PasswordReset.cshtml" />
     <Content Include="Views\Logbook\Logbook.cshtml" />
     <Content Include="Views\Logbook\AddEntry.cshtml" />
+    <Content Include="Views\Logbook\CreateLogbook.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -211,6 +212,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\LogbookViewModels.cs" />
     <Compile Include="Models\HomeViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

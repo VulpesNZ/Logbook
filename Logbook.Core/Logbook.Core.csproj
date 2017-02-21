@@ -46,6 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccess.cs" />
+    <Compile Include="DTO\Activity.cs" />
+    <Compile Include="DTO\Logbook.cs" />
     <Compile Include="DTO\Request.cs" />
     <Compile Include="DTO\User.cs" />
     <Compile Include="Mailer.cs" />

@@ -18,6 +18,12 @@ namespace LogbookUI
                 defaults: new { controller = "Account", action = "PasswordReset" }
             );
 
+            routes.MapRoute(
+                "ViewLogbook",                                              // Route name
+                "Logbook/Logbook/{logbookId}",                           // URL with parameters
+                new { controller = "Logbook", action = "Logbook" }  // Parameter defaults
+            );
+
 
             // Default always goes last
             routes.MapRoute(

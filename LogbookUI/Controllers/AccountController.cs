@@ -132,7 +132,7 @@ namespace LogbookUI.Controllers
                 var pbkdf2 = new Rfc2898DeriveBytes(model.Password, salt, 1000);
                 byte[] hash = pbkdf2.GetBytes(32);
 
-                user = new User
+                user = new UserDTO
                 {
                     Email = model.Email,
                     PasswordHash = hash,
@@ -182,7 +182,7 @@ namespace LogbookUI.Controllers
             }
             else
             {
-                var requestGuid = DataAccess.GenerateRequest(new Request()
+                var requestGuid = DataAccess.GenerateRequest(new RequestDTO()
                 {
                     RequestType = "REQUEST/PASSWORDRESET",
                     UserId = user.UserId
