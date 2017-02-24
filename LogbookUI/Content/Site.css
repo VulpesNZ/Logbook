@@ -1,5 +1,23 @@
 ﻿
-.navbar-inverse {
-  background-color: #ffffff;
-  border-color: #ffffff;
+a {
+    color: #004A7F; 
+}
+
+td {
+    padding: 5px 20px ;
+}
+
+.table-header {
+    font-weight: bold;
+    height: 50px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+h2 {
+    font-family: Century Schoolbook;
+    font-weight: bold;
+    color: #004A7F; 
 }

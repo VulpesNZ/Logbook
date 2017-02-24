@@ -1,0 +1,63 @@
+﻿@using Logbook.Core
+@using Logbook.Core.DTO
+@model LogbookUI.Models.ActivitySettingsViewModel
+@{
+    ViewBag.Title = "Activity Settings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Activity List</h2>
+
+@if (Model.Activities.Any())
+{
+    <table class="table-grid">
+        <tr class="table-header">
+            <td>Name</td>
+        </tr>
+        @foreach (ActivityDTO activity in Model.Activities.OrderBy(a => a.Name))
+        {
+            var trid = activity.ActivityId;
+            <tr id="@trid">
+                <td>@activity.Name</td>
+                <td>@Html.ActionLink("Edit", "EditActivity", new { activityId = activity.ActivityId }) </td>
+                <td>
+                    @Ajax.ActionLink("Remove", "RemoveUserActivity", new { id = activity.ActivityId }, new AjaxOptions()
+               {
+                   Confirm = "Are you sure you wish to permanently remove this Activity?",
+                   HttpMethod = "Delete",
+                   OnSuccess = "$('#" + @trid + "').remove(); "
+               })
+            </td>
+        </tr>
+        }
+        <tr>
+            <td>@Html.TextBox("NewActivityName")</td>
+            <td>
+                <a id="btnSaveComments" style="cursor: pointer;">Add</a>
+            </td>
+        </tr>
+    </table>
+}
+<script src="/scripts/jquery-1.9.1.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    $(document)
+        .ready(function() {
+            $('#btnSaveComments')
+                .click(function() {
+                    var name = $('#NewActivityName').val();
+
+                    $.ajax({
+                        url: '/Settings/AddUserActivity/',
+                        data: { 'name': name },
+                        type: "post",
+                        success: function() {
+                            window.location.reload();
+                        },
+                        error: function(xhr, ajaxOptions, thrownError) {
+
+                        }
+                    });
+                });
+        });
+</script>

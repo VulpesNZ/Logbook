@@ -1,0 +1,35 @@
+﻿@using Logbook.Core
+@using Logbook.Core.DTO
+@model LogbookUI.Models.EditActivityViewModel
+@{
+    ViewBag.Title = "Edit Activity";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit @Model.Name</h2>
+
+@using (Html.BeginForm("EditActivity", "Settings", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.ActivityId)
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.Name)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Description, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextAreaFor(model => model.Description)
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="Update" />
+            <button class="btn btn-default" onclick="location.href='@Url.Action("Settings", "Settings")';return false;">Cancel</button>
+        </div>
+    </div>
+}

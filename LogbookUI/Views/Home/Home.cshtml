@@ -1,9 +1,8 @@
 ﻿  
 @model LogbookUI.Models.HomeViewModel
 @{
-    ViewBag.Title = "Log in";
+    ViewBag.Title = "Home";
 }
   <div>
-      Active Logbook: @Model.ActiveLogbookName @if (Model.ActiveLogbookName == string.Empty ) { <span>(@Html.ActionLink("create", "CreateLogbook"))</span> } else { <span>(@Html.ActionLink("change", "ChangeActiveLogbook"))</span> }
-      <p>  @Html.ActionLink("Add an entry", "AddEntry")</p>
+      News, announcements etc go here.
     </div>

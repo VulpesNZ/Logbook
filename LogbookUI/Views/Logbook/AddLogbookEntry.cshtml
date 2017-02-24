@@ -1,0 +1,46 @@
+﻿@model LogbookUI.Models.AddLogbookEntryViewModel
+@{
+    ViewBag.Title = "New Logbook";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Add Logbook</h2>
+
+@using (Html.BeginForm("AddLogbookEntry", "Logbook", FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.LogbookId)
+    <h4>Add a Logbook entry</h4>
+    <hr/>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.ActivityId, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.ActivityId, new SelectList(Model.Activities, "ActivityId", "Name"), "Choose... ")
+        </div>
+    </div>
+    <div class="form-group date">
+        @Html.LabelFor(m => m.EntryDate, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.EntryDate, new { @class = "form-control", placeholder = "Date of Log Entry..." })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.Notes)
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="Create" />
+        </div>
+    </div>
+
+    <script type="text/javascript">
+    $(function () { // will trigger when the document is ready
+       $('.datepicker').datepicker(); //Initialise any date pickers
+    });
+    </script>
+}

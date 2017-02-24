@@ -1,0 +1,33 @@
+﻿@using Logbook.Core
+@using Logbook.Core.DTO
+@model LogbookUI.Models.MyLogbooksViewModel
+@{
+    ViewBag.Title = "My Logbooks";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>My Logbooks</h2>
+<div style="float:left">@Model.Logbooks.Count() @(Model.Logbooks.Count() == 1 ? "logbook" : "logbooks")</div>
+<div style="float:right">@Html.ActionLink(linkText: "New Logbook", actionName: "CreateLogbook", controllerName: "Logbook")</div>
+<br /><hr />
+@if (Model.Logbooks.Any())
+{
+    <table class="table-grid">
+        <tr class="table-header">
+            <td>Name</td>
+            <td>Activity</td>
+            <td>Last Updated</td>
+            <td>Number of Entries</td>
+        </tr>
+        @foreach (LogbookDTO logbook in Model.Logbooks.OrderByDescending(l => l.UpdateDate))
+        {
+            <tr>
+                <td><a href="\logbook\@logbook.LogbookId">@logbook.Name</a></td>
+                <td>@(logbook.DefaultActivityId != Guid.Empty ? DataAccess.GetActivity(logbook.DefaultActivityId).Name : string.Empty)</td>
+                <td>@logbook.UpdateDate.ToString("dd/MM/yyyy")</td>
+                <td>@DataAccess.GetLogbookEntries(logbook.LogbookId).Count().HyphenIfZero()</td>
+                <td><a href="\Logbook\@logbook.LogbookId\AddEntry">Add Entry</a></td>
+            </tr>
+        }
+    </table>
+}

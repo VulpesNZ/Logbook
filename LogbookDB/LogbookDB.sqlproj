@@ -72,6 +72,8 @@
     <Build Include="Tables\Industry.sql" />
     <Build Include="Tables\IndustryActivity.sql" />
     <Build Include="Tables\Request.sql" />
+    <Build Include="Tables\DefaultActivity.sql" />
+    <Build Include="Tables\DefaultActivityField.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="LogbookDB.refactorlog" />

@@ -105,5 +105,85 @@ namespace Logbook.Core
                 return conn.Query<LogbookDTO>("SELECT TOP 1 * FROM Logbook WHERE LogbookId = @LogbookId", new { LogbookId = logbookId }).SingleOrDefault();
             }
         }
+
+        public static ActivityDTO GetActivity(Guid activityId)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                return conn.Query<ActivityDTO>("SELECT TOP 1 * FROM Activity WHERE ActivityId = @ActivityId", new { ActivityId = activityId }).SingleOrDefault();
+            }
+        }
+
+        public static void AddLogbookEntry(LogbookEntryDTO logbook)
+        {
+            logbook.LogbookEntryId = Guid.NewGuid();
+
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                conn.Execute("INSERT INTO LogbookEntry (LogbookEntryId, LogbookId, ActivityId, CreatedBy, UpdatedBy, CreateDate, UpdateDate, Status, EntryDate, Notes) " +
+                                       "VALUES (@LogbookEntryId, @LogbookId, @ActivityId, @CreatedBy, @UpdatedBy, @CreateDate, @UpdateDate, @Status, @EntryDate, @Notes)",
+                    logbook);
+            }
+        }
+
+        public static IEnumerable<LogbookEntryDTO> GetLogbookEntries(Guid logbookId)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                return conn.Query<LogbookEntryDTO>("SELECT * FROM LogbookEntry WHERE LogbookId = @LogbookId", new { LogbookId = logbookId });
+            }
+        }
+
+        public static IEnumerable<LogbookDTO> GetLogbooks()
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                return conn.Query<LogbookDTO>("SELECT * FROM Logbook");
+            }
+        }
+
+        public static IEnumerable<ActivityDTO> GetActivitiesForUser(Guid userId, bool activeOnly = true)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                var s = "SELECT * FROM Activity WHERE UserId = @UserId";
+                if (activeOnly)
+                    s += " AND Active = 1";
+                return conn.Query<ActivityDTO>(s, new { UserId = userId });
+            }
+        }
+
+        public static void DeleteUserActivity(Guid activityId)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                conn.Execute("UPDATE Activity SET Active = 0 WHERE ActivityId = @ActivityId", new { ActivityId = activityId });
+            }
+        }
+
+        public static void AddUserActivity(Guid userId, string name)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                conn.Execute("INSERT INTO Activity (UserId, Name) VALUES (@UserId, @Name)", new { UserId = userId, Name = name });
+            }
+        }
+
+        public static void UpdateActivity(ActivityDTO dto)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                conn.Execute("UPDATE Activity SET Name = @Name, Description = @Description WHERE ActivityId = @ActivityId", new { dto.ActivityId, dto.Name, dto.Description });
+            }
+        }
+
+
+        public static void UndeleteActivity(Guid activityId)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                conn.Execute("UPDATE Activity SET Active = 1 WHERE ActivityId = @ActivityId", new { ActivityId = activityId });
+            }
+        }
     }
 }

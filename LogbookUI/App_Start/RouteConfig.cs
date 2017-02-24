@@ -20,9 +20,44 @@ namespace LogbookUI
 
             routes.MapRoute(
                 "ViewLogbook",                                              // Route name
-                "Logbook/Logbook/{logbookId}",                           // URL with parameters
+                "Logbook/{logbookId}",                           // URL with parameters
                 new { controller = "Logbook", action = "Logbook" }  // Parameter defaults
             );
+
+            routes.MapRoute(
+                "AddLogbookEntry",                                              // Route name
+                "Logbook/{logbookId}/AddEntry",                           // URL with parameters
+                new { controller = "Logbook", action = "AddLogbookEntry" }  // Parameter defaults
+            );;
+
+
+            routes.MapRoute(
+                "MyLogbooks",                                              // Route name
+                "MyLogbooks",                           // URL with parameters
+                new { controller = "Logbook", action = "MyLogbooks" }  // Parameter defaults
+            );
+
+
+            routes.MapRoute(
+                "NewLogbook",                                              // Route name
+                "NewLogbook",                           // URL with parameters
+                new { controller = "Logbook", action = "CreateLogbook" }  // Parameter defaults
+            ); ;
+
+
+            routes.MapRoute(
+                "Settings",                                              // Route name
+                "Settings",                           // URL with parameters
+                new { controller = "Settings", action = "Settings" }  // Parameter defaults
+            ); ;
+
+
+            routes.MapRoute(
+                "RemoveUserActivity",                                              // Route name
+                "Settings/RemoveUserActivity/{activityId}",                           // URL with parameters
+                new { controller = "Settings", action = "RemoveUserActivity" }  // Parameter defaults
+            ); ;
+
 
 
             // Default always goes last

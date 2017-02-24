@@ -1,7 +1,30 @@
-﻿@model LogbookUI.Models.LogbookViewModel
+﻿@using Logbook.Core
+@using Logbook.Core.DTO
+@model LogbookUI.Models.LogbookViewModel
 @{
     ViewBag.Title = "Logbook";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>@Model.Name</h2>
+<h2>@Model.Name (@Model.Activity)</h2>
+<div style="float:left">@Model.Entries.Count() @(Model.Entries.Count() == 1 ? "entry" : "entries"), last updated @Model.LastUpdated.ToString("dd/MM/yyyy")</div>
+<div style="float:right">@Html.ActionLink(linkText: "Add Entry", actionName: "AddLogbookEntry", controllerName: "Logbook", routeValues: new { logbookId = Model.LogbookId }, htmlAttributes:null)</div>
+<br /><hr />
+@if (Model.Entries.Count() > 0)
+{
+    <table>
+        <tr class="table-header">
+            <td>Activity</td>
+            <td>Date</td>
+            <td>Notes</td>
+        </tr>
+        @foreach (LogbookEntryDTO entry in Model.Entries)
+        {
+            <tr>
+                <td>@DataAccess.GetActivity(entry.ActivityId).Name</td>
+                <td>@entry.EntryDate</td>
+                <td>@entry.Notes</td>
+            </tr>
+        }
+    </table>
+}

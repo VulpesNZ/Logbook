@@ -23,7 +23,7 @@ namespace LogbookUI.Controllers
         public ActionResult CreateLogbook()
         {
             var model = new CreateLogbookViewModel();
-            model.Activities = DataAccess.GetActivities();
+            model.Activities = DataAccess.GetActivitiesForUser(DataAccess.GetUser(User.Identity.GetUserName()).UserId);
             return View(model);
         }
 
@@ -37,6 +37,8 @@ namespace LogbookUI.Controllers
             logbook.Status = "STATUS/ACTIVE";
             logbook.CreatedBy = Guid.Empty;
             logbook.UpdatedBy = Guid.Empty;
+            logbook.CreateDate = DateTime.Now;
+            logbook.UpdateDate = DateTime.Now;
             DataAccess.CreateLogbook(logbook);
             if (logbook.LogbookId == Guid.Empty)
             {
@@ -55,7 +57,55 @@ namespace LogbookUI.Controllers
             var logbook = new LogbookViewModel();
             var logbookDTO = DataAccess.GetLogbook(logbookId);
             logbook.Name = logbookDTO.Name;
+            logbook.Activity = DataAccess.GetActivity(logbookDTO.DefaultActivityId).Name;
+            logbook.LastUpdated = logbookDTO.UpdateDate;
+            logbook.LogbookId = logbookDTO.LogbookId;
+            logbook.Entries = DataAccess.GetLogbookEntries(logbook.LogbookId);
             return View(logbook);
+        }
+
+        [Authorize]
+        public ActionResult AddLogbookEntry(Guid logbookId)
+        {
+            var model = new AddLogbookEntryViewModel();
+            model.Activities = DataAccess.GetActivitiesForUser(DataAccess.GetUser(User.Identity.GetUserName()).UserId);  //TODO: Unfuck this
+            model.LogbookId = logbookId;
+            model.EntryDate = DateTime.Today;
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<ActionResult> AddLogbookEntry(AddLogbookEntryViewModel model)
+        {
+            var logbook = new LogbookEntryDTO();
+            logbook.LogbookId = model.LogbookId;
+            logbook.ActivityId = model.ActivityId;
+            logbook.Status = "STATUS/ACTIVE";
+            logbook.CreatedBy = Guid.Empty;
+            logbook.UpdatedBy = Guid.Empty;
+            logbook.CreateDate = DateTime.Now;
+            logbook.UpdateDate = DateTime.Now;
+            logbook.EntryDate = model.EntryDate;
+            logbook.Notes = model.Notes;
+            DataAccess.AddLogbookEntry(logbook);
+            if (logbook.LogbookId == Guid.Empty)
+            {
+                ModelState.AddModelError("", "Failed to create entry");
+            }
+            else
+            {
+                return RedirectToAction("Logbook", "Logbook", new { logbookId = logbook.LogbookId });
+            }
+            return View(model);
+        }
+
+        [Authorize]
+        public ActionResult MyLogbooks()
+        {
+            var model = new MyLogbooksViewModel();
+            model.Logbooks = DataAccess.GetLogbooks();
+            return View(model);
         }
     }
 }
