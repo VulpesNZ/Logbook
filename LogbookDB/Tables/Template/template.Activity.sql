@@ -1,7 +1,8 @@
-﻿CREATE TABLE [dbo].[DefaultActivity]
+﻿CREATE TABLE [template].[Activity]
 (
 	[ActivityId] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT NEWID(),
     [Name] NVARCHAR(50) NOT NULL, 
     [Description] NVARCHAR(255) NULL, 
-    [ImageURL] NVARCHAR(255) NULL
+    [ImageURL] NVARCHAR(255) NULL,
+	[SortOrder] INT NOT NULL DEFAULT 0
 )

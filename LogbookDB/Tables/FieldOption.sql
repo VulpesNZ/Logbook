@@ -1,0 +1,11 @@
+﻿CREATE TABLE [dbo].[FieldOption]
+(
+	[FieldOptionId] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
+	[FieldId] UNIQUEIDENTIFIER NOT NULL,
+	[Text] VARCHAR(200) NOT NULL,
+	[SortOrder] INT NOT NULL DEFAULT 0,
+	[Active] BIT NOT NULL DEFAULT 1,
+
+    CONSTRAINT [FK_FieldOption_Field] FOREIGN KEY ([FieldId]) REFERENCES [Field]([FieldId]), 
+
+)

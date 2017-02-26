@@ -25,5 +25,7 @@ namespace LogbookUI.Models
 
         [Display(Name = "Image")]
         public string ImageUrl { get; set; }
+        
+        public FieldDTO Fields { get; set; }
     }
 }
