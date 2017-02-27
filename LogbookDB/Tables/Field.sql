@@ -9,6 +9,7 @@
     [IsMultiSelect] BIT NOT NULL DEFAULT 0, 
 	[SortOrder] INT NOT NULL DEFAULT 0,
     [Active] BIT NOT NULL DEFAULT 1, 
+	[TemplateFieldId] UNIQUEIDENTIFIER NULL,
 	CONSTRAINT [FK_Field_User] FOREIGN KEY ([UserId]) REFERENCES [User]([UserId]),
 	CONSTRAINT [FK_Field_Activity] FOREIGN KEY ([ActivityId]) REFERENCES [Activity]([ActivityId])
     

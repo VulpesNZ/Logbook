@@ -6,6 +6,7 @@
     [Description] NVARCHAR(255) NULL, 
     [ImageURL] NVARCHAR(255) NULL,
 	[Active] BIT NOT NULL DEFAULT 1,
+	[TemplateActivityId] UNIQUEIDENTIFIER NULL,
     CONSTRAINT [FK_Activity_User] FOREIGN KEY ([UserId]) REFERENCES [User]([UserId]), 
 	CONSTRAINT [PK_Activity] PRIMARY KEY ([ActivityId])
 	

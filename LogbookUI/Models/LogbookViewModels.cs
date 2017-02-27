@@ -27,7 +27,7 @@ namespace LogbookUI.Models
         [Display(Name = "Logbook Name")]
         public string Name { get; set; }
         
-        [Display(Name = "Activity")]
+        [Display(Name = "Usual Activity")]
         public string Activity { get; set; }
         
         [Display(Name = "Last Updated")]

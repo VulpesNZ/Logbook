@@ -68,7 +68,6 @@
     <Build Include="Tables\Preference.sql" />
     <Build Include="Tables\UserPreference.sql" />
     <Build Include="Tables\Field.sql" />
-    <Build Include="Tables\UserCustomFieldValue.sql" />
     <Build Include="Tables\Activity.sql" />
     <Build Include="Tables\Logbook.sql" />
     <Build Include="Tables\LogbookEntry.sql" />
