@@ -185,5 +185,58 @@ namespace Logbook.Core
                 conn.Execute("UPDATE Activity SET Active = 1 WHERE ActivityId = @ActivityId", new { ActivityId = activityId });
             }
         }
+        public static void UndeleteField(Guid fieldId)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                conn.Execute("UPDATE Field SET Active = 1 WHERE FieldId = @FieldId", new { FieldId = fieldId });
+            }
+        }
+
+
+        public static IEnumerable<FieldDTO> GetFields(Guid activityId, bool activeOnly = true)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                var s = "SELECT * FROM Field WHERE ActivityId = @ActivityId";
+                if (activeOnly)
+                    s += " AND Active = 1";
+                return conn.Query<FieldDTO>(s, new { ActivityId = activityId });
+            }
+        }
+
+        public static FieldDTO GetField(Guid fieldId)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                return conn.Query<FieldDTO>("SELECT TOP 1 * FROM Field WHERE FieldId = @FieldId", new { FieldId = fieldId }).SingleOrDefault();
+            }
+        }
+
+        public static FieldOptionDTO GetFieldOption(Guid fieldOptionId)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                return conn.Query<FieldOptionDTO>("SELECT TOP 1 * FROM FieldOption WHERE FieldOptionId = @FieldOptionId", new { FieldOptionId = fieldOptionId }).SingleOrDefault();
+            }
+        }
+
+        public static IEnumerable<FieldOptionDTO> GetFieldOptions(Guid fieldId)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                return conn.Query<FieldOptionDTO>("SELECT * FROM FieldOption WHERE FieldId = @FieldId", new { FieldId = fieldId });
+            }
+        }
+
+
+        public static void AddField(Guid userId, Guid activityId, string name)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                conn.Execute("INSERT INTO Field (UserId, ActivityId, Name) VALUES (@UserId, @ActivityId, @Name)", new { UserId = userId, ActivityId = activityId, Name = name });
+            }
+        }
+
     }
 }

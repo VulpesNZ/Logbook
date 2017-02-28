@@ -19,7 +19,7 @@ using Microsoft.Owin.Security;
 namespace LogbookUI.Controllers
 {
     [Authorize]
-    public class AccountController : Controller
+    public class AccountController : CustomController
     {
         private IAuthenticationManager AuthenticationManager
         {

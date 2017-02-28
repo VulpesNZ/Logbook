@@ -11,7 +11,7 @@ using Microsoft.AspNet.Identity;
 namespace LogbookUI.Controllers
 {
     [Authorize]
-    public class LogbookController : Controller
+    public class LogbookController : CustomController
     {
         [Authorize]
         public ActionResult AddEntry()

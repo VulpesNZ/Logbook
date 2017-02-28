@@ -1,0 +1,43 @@
+﻿@using Logbook.Core
+@using Logbook.Core.DTO
+@model LogbookUI.Models.EditFieldViewModel
+@{
+    ViewBag.Title = "Edit Field";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit @Model.Name</h2>
+
+@using (Html.BeginForm("EditField", "Settings", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.FieldId)
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.Name)
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="Update" />
+            <button class="btn btn-default" onclick="location.href='@Url.Action("EditActivity", "Settings", new { activityId = DataAccess.GetField(Model.FieldId).ActivityId })';return false;">Cancel</button>
+        </div>
+    </div>
+
+    <h3>Selectable Fields for @Model.Name</h3>
+    <table class="table-grid">
+        <tr class="table-header">
+            <td>Name</td>
+        </tr>
+        @foreach (FieldOptionDTO option in Model.FieldOptions.OrderBy(o => o.SortOrder))
+        {
+            <tr>
+                <td><a href="\Settings\EditFieldOption\@option.FieldOptionId">@option.Text</a></td>
+            </tr>
+        }
+    </table>
+
+}

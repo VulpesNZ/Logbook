@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccess.cs" />
+    <Compile Include="DTO\FieldOption.cs" />
     <Compile Include="DTO\Field.cs" />
     <Compile Include="DTO\Activity.cs" />
     <Compile Include="DTO\LogbookEntry.cs" />
@@ -54,6 +55,7 @@
     <Compile Include="DTO\User.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Mailer.cs" />
+    <Compile Include="MenuConstructor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

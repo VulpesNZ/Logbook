@@ -14,17 +14,18 @@
             <img src="../../images/logo_small.jpg">
         </div>  
         </div>  
-        <div class="navbar navbar-static-top">
-            <div class="container">
-                    <ul class="nav navbar-nav" style="font-family: Century Schoolbook; font-size: larger; font-weight: bold">
-                        <li>@Html.ActionLink("Home", "Home", "Home", new { area = "" }, new { @class = "navbar" })</li> 
-                        <li>@Html.ActionLink("My Logbooks", "MyLogbooks", "Logbook", new { area = "" }, null)</li> 
-                        <li>@Html.ActionLink("Customise", "Settings", "Settings", new { area = "" }, null)</li> 
-                    </ul>
-                    @Html.Partial("_LoginPartial")
-            </div>
-        </div>
+<div class="navbar navbar-static-top">
+    <div class="container">
+        <ul class="nav navbar-nav" style="font-family: Century Schoolbook; font-size: larger; font-weight: bold">
+            <li>@Html.ActionLink("Home", "Home", "Home", new { area = "" }, new { @class = "navbar" })</li> 
+            <li>@Html.ActionLink("My Logbooks", "MyLogbooks", "Logbook", new { area = "" }, null)</li> 
+            <li>@Html.ActionLink("Customise", "Settings", "Settings", new { area = "" }, null)</li> 
+        </ul>
+        @Html.Partial("_LoginPartial")
+    </div>
+</div>
         <div class="container body-content">
+            @Html.Raw(@ViewBag.BackLinkHtml)
             @RenderBody()
             @RenderSection("SPAViews", required: false)
             <hr />

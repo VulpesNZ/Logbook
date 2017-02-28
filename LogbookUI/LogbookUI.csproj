@@ -177,6 +177,8 @@
     <Content Include="Views\Logbook\MyLogbooks.cshtml" />
     <Content Include="Views\Settings\Settings.cshtml" />
     <Content Include="Views\Settings\EditActivity.cshtml" />
+    <Content Include="Views\Settings\EditField.cshtml" />
+    <Content Include="Views\Settings\EditFieldOption.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -215,6 +217,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CustomController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\LogbookController.cs" />
     <Compile Include="Controllers\HomeController.cs" />

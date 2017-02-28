@@ -11,7 +11,7 @@ using Microsoft.AspNet.Identity;
 namespace LogbookUI.Controllers
 {
     [Authorize]
-    public class SettingsController : Controller
+    public class SettingsController : CustomController
     {
         [Authorize]
         public ActionResult Settings()
@@ -32,11 +32,13 @@ namespace LogbookUI.Controllers
         [Authorize]
         public ActionResult EditActivity(Guid activityId)
         {
+            ViewBag.BackLinkHtml = MenuConstructor.ConstructHtmlBackLink("EditActivity", activityId);
             var model = new EditActivityViewModel();
             var dto = DataAccess.GetActivity(activityId);
             model.Name = dto.Name;
             model.Description = dto.Description;
             model.ImageUrl = dto.ImageUrl;
+            model.Fields = DataAccess.GetFields(activityId);
             return View(model);
         }
 
@@ -68,6 +70,49 @@ namespace LogbookUI.Controllers
             else
             {
                 DataAccess.AddUserActivity(DataAccess.GetUser(User.Identity.GetUserName()).UserId, name);
+            }
+            return null;
+        }
+        
+        [Authorize]
+        public ActionResult EditField(Guid fieldId)
+        {
+            ViewBag.BackLinkHtml = MenuConstructor.ConstructHtmlBackLink("EditField", fieldId);
+            var model = new EditFieldViewModel();
+            var dto = DataAccess.GetField(fieldId);
+            model.FieldId = dto.FieldId;
+            model.Name = dto.Name;
+            model.FieldOptions = DataAccess.GetFieldOptions(fieldId);
+            return View(model);
+        }
+
+        [Authorize]
+        public ActionResult EditFieldOption(Guid fieldOptionId)
+        {
+            ViewBag.BackLinkHtml = MenuConstructor.ConstructHtmlBackLink("EditFieldOption", fieldOptionId);
+            var model = new EditFieldOptionViewModel();
+            var dto = DataAccess.GetFieldOption(fieldOptionId);
+            model.FieldOptionId = fieldOptionId;
+            model.Text = dto.Text;
+            return View(model);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult AddField(Guid activityId, string fieldName)
+        {
+            var activities = DataAccess.GetFields(activityId, false);
+            var existingActivity = activities.FirstOrDefault(a => a.Name.Equals(fieldName, StringComparison.CurrentCultureIgnoreCase));
+            if (existingActivity != null)
+            {
+                if (existingActivity.Active)
+                    ModelState.AddModelError("A field by that name already exists.", string.Empty);  // TODO: This doesn't work
+                else
+                    DataAccess.UndeleteActivity(existingActivity.ActivityId);
+            }
+            else
+            {
+                DataAccess.AddField(DataAccess.GetUser(User.Identity.GetUserName()).UserId, activityId, fieldName);
             }
             return null;
         }

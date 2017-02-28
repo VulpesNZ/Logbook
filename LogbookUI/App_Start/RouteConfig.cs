@@ -42,21 +42,39 @@ namespace LogbookUI
                 "NewLogbook",                                              // Route name
                 "NewLogbook",                           // URL with parameters
                 new { controller = "Logbook", action = "CreateLogbook" }  // Parameter defaults
-            ); ;
+            );
 
 
             routes.MapRoute(
                 "Settings",                                              // Route name
                 "Settings",                           // URL with parameters
                 new { controller = "Settings", action = "Settings" }  // Parameter defaults
-            ); ;
+            );
 
 
             routes.MapRoute(
                 "RemoveUserActivity",                                              // Route name
                 "Settings/RemoveUserActivity/{activityId}",                           // URL with parameters
                 new { controller = "Settings", action = "RemoveUserActivity" }  // Parameter defaults
-            ); ;
+            );
+
+            routes.MapRoute(
+                "Settings/EditActivity",                                              // Route name
+                "Settings/EditActivity/{activityId}",                           // URL with parameters
+                new { controller = "Settings", action = "EditActivity" }  // Parameter defaults
+            );
+
+            routes.MapRoute(
+                "Settings/EditField",                                              // Route name
+                "Settings/EditField/{fieldId}",                           // URL with parameters
+                new { controller = "Settings", action = "EditField" }  // Parameter defaults
+            );
+
+            routes.MapRoute(
+                "Settings/EditFieldOption",                                              // Route name
+                "Settings/EditFieldOption/{fieldOptionId}",                           // URL with parameters
+                new { controller = "Settings", action = "EditFieldOption" }  // Parameter defaults
+            );
 
 
 

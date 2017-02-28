@@ -8,7 +8,7 @@ using Microsoft.AspNet.Identity;
 namespace LogbookUI.Controllers
 {
     [Authorize]
-    public class HomeController : Controller
+    public class HomeController : CustomController
     {
         [Authorize]
         public ActionResult Index()

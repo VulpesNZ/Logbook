@@ -11,7 +11,7 @@
 @using (Html.BeginForm("EditActivity", "Settings", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
-    @Html.HiddenFor(m => m.ActivityId)
+    @Html.Hidden("ActivityId", Model.ActivityId, new { @id="ActivityId"})
 
     <div class="form-group">
         @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label" })
@@ -34,4 +34,52 @@
     </div>
 
     <h3>Additional Fields for @Model.Name</h3>
+    <table class="table-grid">
+        <tr class="table-header">
+            <td>Name</td>
+            <td>Required</td>
+            <td>Allow Multiple Selection</td>
+            <td>Allow Free Text Entry</td>
+        </tr>
+        @foreach (FieldDTO field in Model.Fields.OrderBy(f => f.Name))
+        {
+            <tr>
+                <td><a href="\Settings\EditField\@field.FieldId">@field.Name</a></td>
+                <td>@(field.IsRequired ? "Yes" : "No")</td>
+                <td>@(field.IsMultiSelect ? "Yes" : "No")</td>
+                <td>@(field.AllowFreeText ? "Yes" : "No")</td>
+            </tr>
+        }
+        <tr>
+            <td>@Html.TextBox("NewFieldName")</td>
+            <td>
+                <a id="btnAddField" style="cursor: pointer;">Add</a>
+            </td>
+        </tr>
+    </table>
+
 }
+<script src="/scripts/jquery-1.9.1.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    $(document)
+        .ready(function() {
+            $('#btnAddField')
+                .click(function() {
+                    var name = $('#NewFieldName').val();
+                    var activityId = $('#ActivityId').val();
+
+                    $.ajax({
+                        url: '/Settings/AddField/',
+                        data: { 'fieldName': name, 'activityId': activityId },
+                        type: "post",
+                        success: function() {
+                            window.location.reload();
+                        },
+                        error: function(xhr, ajaxOptions, thrownError) {
+
+                        }
+                    });
+                });
+        });
+</script>

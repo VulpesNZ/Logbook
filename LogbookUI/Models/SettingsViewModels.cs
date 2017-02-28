@@ -16,7 +16,6 @@ namespace LogbookUI.Models
     {
         public Guid ActivityId { get; set; }
 
-        //   public IEnumerable<ActivityDTO> Activities { get; set; }
         [Display(Name = "Name")]
         public string Name { get; set; }
 
@@ -26,6 +25,24 @@ namespace LogbookUI.Models
         [Display(Name = "Image")]
         public string ImageUrl { get; set; }
         
-        public FieldDTO Fields { get; set; }
+        public IEnumerable<FieldDTO> Fields { get; set; }
+    }
+
+    public class EditFieldViewModel
+    {
+        public Guid FieldId { get; set; }
+
+        [Display(Name = "Name")]
+        public string Name { get; set; }
+
+        public IEnumerable<FieldOptionDTO> FieldOptions { get; set; }
+    }
+
+    public class EditFieldOptionViewModel
+    {
+        public Guid FieldOptionId { get; set; }
+
+        [Display(Name = "Name")]
+        public string Text { get; set; }
     }
 }
