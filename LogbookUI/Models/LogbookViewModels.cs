@@ -54,6 +54,7 @@ namespace LogbookUI.Models
         [Display(Name = "Notes")]
         public string Notes { get; set; }
 
+        public IEnumerable<ActivityFieldOptionMapping> ActivityFieldOptionMappings { get; set; }
     }
 
     public class MyLogbooksViewModel

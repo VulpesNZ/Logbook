@@ -177,6 +177,14 @@ namespace Logbook.Core
             }
         }
 
+        public static void UpdateField(FieldDTO dto)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                conn.Execute("UPDATE Field SET Name = @Name WHERE FieldId = @FieldId", new { dto.FieldId, dto.Name });
+            }
+        }
+
 
         public static void UndeleteActivity(Guid activityId)
         {
@@ -190,6 +198,13 @@ namespace Logbook.Core
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
             {
                 conn.Execute("UPDATE Field SET Active = 1 WHERE FieldId = @FieldId", new { FieldId = fieldId });
+            }
+        }
+        public static void UndeleteFieldOption(Guid fieldOptionId)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                conn.Execute("UPDATE FieldOption SET Active = 1 WHERE FieldOptionId = @FieldOptionId", new { FieldOptionId = fieldOptionId });
             }
         }
 
@@ -237,6 +252,20 @@ namespace Logbook.Core
                 conn.Execute("INSERT INTO Field (UserId, ActivityId, Name) VALUES (@UserId, @ActivityId, @Name)", new { UserId = userId, ActivityId = activityId, Name = name });
             }
         }
+        public static void AddFieldOption(Guid fieldId, string text)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                conn.Execute("INSERT INTO FieldOption (FieldId, Text, SortOrder) VALUES (@FieldId, @Text, (SELECT MAX(SortOrder) FROM FieldOption WHERE FieldId = @FieldId) + 1)", new { FieldId = fieldId, Text = text });
+            } 
+        }
 
+        public static IEnumerable<ActivityFieldOptionMapping> GetFieldOptionMappings(Guid userId)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                return conn.Query<ActivityFieldOptionMapping>("SELECT * FROM ActivityFieldOptionMapping WHERE UserId = @UserId", new { UserId = userId });
+            }
+        }
     }
 }

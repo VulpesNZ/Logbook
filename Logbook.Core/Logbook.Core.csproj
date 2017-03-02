@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccess.cs" />
+    <Compile Include="DTO\ActivityFieldOptionMapping.cs" />
     <Compile Include="DTO\FieldOption.cs" />
     <Compile Include="DTO\Field.cs" />
     <Compile Include="DTO\Activity.cs" />

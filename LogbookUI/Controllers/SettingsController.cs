@@ -86,6 +86,17 @@ namespace LogbookUI.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        [Authorize]
+        public ActionResult EditField(EditFieldViewModel model)
+        {
+            var dto = new FieldDTO();
+            dto.FieldId = model.FieldId;
+            dto.Name = model.Name;
+            DataAccess.UpdateField(dto);
+            return RedirectToAction("EditActivity", "Settings", new { activityId = DataAccess.GetField(model.FieldId).ActivityId });
+        }
+
         [Authorize]
         public ActionResult EditFieldOption(Guid fieldOptionId)
         {
@@ -101,18 +112,38 @@ namespace LogbookUI.Controllers
         [HttpPost]
         public ActionResult AddField(Guid activityId, string fieldName)
         {
-            var activities = DataAccess.GetFields(activityId, false);
-            var existingActivity = activities.FirstOrDefault(a => a.Name.Equals(fieldName, StringComparison.CurrentCultureIgnoreCase));
-            if (existingActivity != null)
+            var fields = DataAccess.GetFields(activityId, false);
+            var existingField = fields.FirstOrDefault(a => a.Name.Equals(fieldName, StringComparison.CurrentCultureIgnoreCase));
+            if (existingField != null)
             {
-                if (existingActivity.Active)
+                if (existingField.Active)
                     ModelState.AddModelError("A field by that name already exists.", string.Empty);  // TODO: This doesn't work
                 else
-                    DataAccess.UndeleteActivity(existingActivity.ActivityId);
+                    DataAccess.UndeleteField(existingField.FieldId);
             }
             else
             {
                 DataAccess.AddField(DataAccess.GetUser(User.Identity.GetUserName()).UserId, activityId, fieldName);
+            }
+            return null;
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult AddFieldOption(Guid fieldId, string optionName)
+        {
+            var fieldOptions = DataAccess.GetFieldOptions(fieldId);
+            var existingOption = fieldOptions.FirstOrDefault(a => a.Text.Equals(optionName, StringComparison.CurrentCultureIgnoreCase));
+            if (existingOption != null)
+            {
+                if (existingOption.Active)
+                    ModelState.AddModelError("An option by that name already exists.", string.Empty);  // TODO: This doesn't work
+                else
+                    DataAccess.UndeleteFieldOption(existingOption.FieldOptionId);
+            }
+            else
+            {
+                DataAccess.AddFieldOption(fieldId, optionName);
             }
             return null;
         }

@@ -71,6 +71,8 @@ namespace LogbookUI.Controllers
             model.Activities = DataAccess.GetActivitiesForUser(DataAccess.GetUser(User.Identity.GetUserName()).UserId);  //TODO: Unfuck this
             model.LogbookId = logbookId;
             model.EntryDate = DateTime.Today;
+            model.ActivityId = DataAccess.GetLogbook(logbookId).DefaultActivityId;
+            model.ActivityFieldOptionMappings = DataAccess.GetFieldOptionMappings(DataAccess.GetUser(User.Identity.GetUserName()).UserId);
             return View(model);
         }
 

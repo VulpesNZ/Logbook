@@ -1,4 +1,6 @@
-﻿@model LogbookUI.Models.AddLogbookEntryViewModel
+﻿@using Logbook.Core
+@using Logbook.Core.DTO
+@model LogbookUI.Models.AddLogbookEntryViewModel
 @{
     ViewBag.Title = "New Logbook";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -31,6 +33,35 @@
             @Html.TextBoxFor(model => model.Notes)
         </div>
     </div>
+    <table class="table-grid">
+        @foreach (var fieldId in Model.ActivityFieldOptionMappings.Select(m => m.FieldId).Distinct())
+        {
+            var fieldName = Model.ActivityFieldOptionMappings.First(m => m.FieldId == fieldId).FieldName;
+            <tr>
+                <td><b>@fieldName</b></td>
+                <td><table class="table-grid">
+                    @{
+                        var i = 0;
+                        foreach (var option in Model.ActivityFieldOptionMappings.Where(m => m.FieldId == fieldId && m.FieldOptionId != Guid.Empty))
+                        {
+                            if (i%2 == 0)
+                            {
+                                @Html.Raw("<tr><td />");
+                            }
+                            @Html.Raw("<td>");
+                            @Html.Raw("<input type=\"checkbox\" name=\"" + option.FieldName.Replace(" ", "_") + "_" + option.OptionText.Replace(" ", "_") + "\"> " + option.OptionText);
+                            @Html.Raw("</td>");
+                            if (i % 2 == 1)
+                            {
+                                @Html.Raw("</tr>");
+                            }
+                            i++;
+                        }
+                    }
+                </table></td>
+            </tr>
+        }
+    </table>
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
