@@ -30,7 +30,18 @@ namespace Logbook.Core
                 var activity = DataAccess.GetActivity(field.ActivityId);
                 return $"<b>{Home()} > {Settings()} > {EditActivityURL(activity)} > {EditFieldURL(field)} > {fieldOption.Text}</b>";
             }
-            return "test";
+            if (page == "Logbook")
+            {
+                var logbook = DataAccess.GetLogbook(id);
+                return $"<b>{MyLogbooks()} > {logbook.Name}</b>";
+            }
+            if (page == "LogbookEntry")
+            {
+                var logbookEntry = DataAccess.GetLogbookEntry(id);
+                var logbook = DataAccess.GetLogbook(logbookEntry.LogbookId);
+                return $"<b>{MyLogbooks()} > {LogbookUrl(logbook)} > {logbookEntry.EntryDate:dd/MM/yyyy}</b>";
+            }
+            return string.Empty;
         }
 
         private static string Home()
@@ -51,6 +62,17 @@ namespace Logbook.Core
         private static string EditFieldURL(FieldDTO field)
         {
             return $"<a href =\"/Settings/EditField/{field.FieldId}\">{field.Name}</a>";
+        }
+
+        private static string MyLogbooks()
+        {
+            return $"<a href=\"/MyLogbooks\">My Logbooks</a>";
+        }
+
+        private static string LogbookUrl(LogbookDTO logbook)
+        {
+            return $"<a href =\"/Logbook/{logbook.LogbookId}\">{logbook.Name}</a>";
+
         }
     }
 }

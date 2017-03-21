@@ -28,7 +28,13 @@ namespace LogbookUI
                 "AddLogbookEntry",                                              // Route name
                 "Logbook/{logbookId}/AddEntry",                           // URL with parameters
                 new { controller = "Logbook", action = "AddLogbookEntry" }  // Parameter defaults
-            );;
+            ); 
+            routes.MapRoute(
+                "LogbookEntry",                                              // Route name
+                "LogbookEntry/{logbookEntryId}",                           // URL with parameters
+                new { controller = "Logbook", action = "LogbookEntry" }  // Parameter defaults
+            ); 
+
 
 
             routes.MapRoute(

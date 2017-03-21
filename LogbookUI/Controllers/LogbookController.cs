@@ -54,6 +54,7 @@ namespace LogbookUI.Controllers
         [Authorize]
         public ActionResult Logbook(Guid logbookId)
         {
+            ViewBag.BackLinkHtml = MenuConstructor.ConstructHtmlBackLink("Logbook", logbookId);
             var logbook = new LogbookViewModel();
             var logbookDTO = DataAccess.GetLogbook(logbookId);
             logbook.Name = logbookDTO.Name;
@@ -72,7 +73,7 @@ namespace LogbookUI.Controllers
             model.LogbookId = logbookId;
             model.EntryDate = DateTime.Today;
             model.ActivityId = DataAccess.GetLogbook(logbookId).DefaultActivityId;
-            model.ActivityFieldOptionMappings = DataAccess.GetFieldOptionMappings(DataAccess.GetUser(User.Identity.GetUserName()).UserId);
+            model.LogbookEntryFields = DataAccess.GetFieldOptionMappings(DataAccess.GetUser(User.Identity.GetUserName()).UserId, model.ActivityId);
             return View(model);
         }
 
@@ -90,6 +91,7 @@ namespace LogbookUI.Controllers
             logbook.UpdateDate = DateTime.Now;
             logbook.EntryDate = model.EntryDate;
             logbook.Notes = model.Notes;
+            logbook.EntryFields = model.LogbookEntryFields;
             DataAccess.AddLogbookEntry(logbook);
             if (logbook.LogbookId == Guid.Empty)
             {
@@ -107,6 +109,34 @@ namespace LogbookUI.Controllers
         {
             var model = new MyLogbooksViewModel();
             model.Logbooks = DataAccess.GetLogbooks();
+            return View(model);
+        }
+
+        [Authorize]
+        public ActionResult LogbookEntry(Guid logbookEntryId)
+        {
+            ViewBag.BackLinkHtml = MenuConstructor.ConstructHtmlBackLink("LogbookEntry", logbookEntryId);
+            var entry = DataAccess.GetLogbookEntry(logbookEntryId);
+            var model = new LogbookEntryViewModel();
+            model.Notes = entry.Notes;
+            model.EntryDate = entry.EntryDate;
+            model.Logbook = DataAccess.GetLogbook(entry.LogbookId);
+            model.ActivityId = entry.ActivityId;
+            // format the option selections for readability.
+            var fields = DataAccess.GetSelectedFields(logbookEntryId);
+            Dictionary<string,string> selectedFieldText = new Dictionary<string, string>();
+            foreach (var f in fields)
+            {
+                if (selectedFieldText.ContainsKey(f.FieldName))
+                {
+                    selectedFieldText[f.FieldName] += ", " + f.OptionText;
+                }
+                else
+                {
+                    selectedFieldText.Add(f.FieldName, f.OptionText);
+                }
+            }
+            model.SelectedFields = selectedFieldText.Select(f => new SelectedFieldOption() {FieldName = f.Key, OptionText = f.Value}).ToArray();
             return View(model);
         }
     }

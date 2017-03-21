@@ -1,8 +1,9 @@
 ﻿@using Logbook.Core
 @using Logbook.Core.DTO
+@using Microsoft.Owin.Security.Infrastructure
 @model LogbookUI.Models.AddLogbookEntryViewModel
 @{
-    ViewBag.Title = "New Logbook";
+    ViewBag.Title = "New Logbook Entry";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -34,28 +35,33 @@
         </div>
     </div>
     <table class="table-grid">
-        @foreach (var fieldId in Model.ActivityFieldOptionMappings.Select(m => m.FieldId).Distinct())
+        @for (int i = 0; i < Model.LogbookEntryFields.Count(); i++)
         {
-            var fieldName = Model.ActivityFieldOptionMappings.First(m => m.FieldId == fieldId).FieldName;
+            var fieldName = Model.LogbookEntryFields[i].Name;
             <tr>
                 <td><b>@fieldName</b></td>
                 <td><table class="table-grid">
                     @{
-                        var i = 0;
-                        foreach (var option in Model.ActivityFieldOptionMappings.Where(m => m.FieldId == fieldId && m.FieldOptionId != Guid.Empty))
+                        int rowCount = 0;
+                        for (int j = 0; j < Model.LogbookEntryFields[i].ActivityFieldOptionMappings.Count(); j++)
                         {
-                            if (i%2 == 0)
+                            if (!string.IsNullOrEmpty(Model.LogbookEntryFields[i].ActivityFieldOptionMappings[j].OptionText))
                             {
-                                @Html.Raw("<tr><td />");
+                                @Html.HiddenFor(m => m.LogbookEntryFields[i].ActivityFieldOptionMappings[j].FieldOptionId);
+                                if (rowCount % 2 == 0)
+                                {
+                                    @Html.Raw("<tr><td />");
+                                }
+                                @Html.Raw("<td>");
+                                @Html.CheckBoxFor(m => m.LogbookEntryFields[i].ActivityFieldOptionMappings[j].Selected, new { Style = "margin-right: 10px; vertical-align:top"});
+                                @Html.Label(Model.LogbookEntryFields[i].ActivityFieldOptionMappings[j].OptionText ?? string.Empty, new { Style = "vertical-align:top" });
+                                @Html.Raw("</td></div>");
+                                if (rowCount % 2 == 1)
+                                {
+                                    @Html.Raw("</tr>");
+                                }
+                                rowCount++;
                             }
-                            @Html.Raw("<td>");
-                            @Html.Raw("<input type=\"checkbox\" name=\"" + option.FieldName.Replace(" ", "_") + "_" + option.OptionText.Replace(" ", "_") + "\"> " + option.OptionText);
-                            @Html.Raw("</td>");
-                            if (i % 2 == 1)
-                            {
-                                @Html.Raw("</tr>");
-                            }
-                            i++;
                         }
                     }
                 </table></td>

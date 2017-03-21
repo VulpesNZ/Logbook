@@ -120,9 +120,20 @@ namespace Logbook.Core
 
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
             {
-                conn.Execute("INSERT INTO LogbookEntry (LogbookEntryId, LogbookId, ActivityId, CreatedBy, UpdatedBy, CreateDate, UpdateDate, Status, EntryDate, Notes) " +
-                                       "VALUES (@LogbookEntryId, @LogbookId, @ActivityId, @CreatedBy, @UpdatedBy, @CreateDate, @UpdateDate, @Status, @EntryDate, @Notes)",
-                    logbook);
+                var entryId = conn.Query<Guid>("INSERT INTO LogbookEntry (LogbookEntryId, LogbookId, ActivityId, CreatedBy, UpdatedBy, CreateDate, UpdateDate, Status, EntryDate, Notes) " +
+                                               "OUTPUT inserted.LogbookEntryId " +
+                                                "VALUES (@LogbookEntryId, @LogbookId, @ActivityId, @CreatedBy, @UpdatedBy, @CreateDate, @UpdateDate, @Status, @EntryDate, @Notes)",
+                    logbook).Single();
+                foreach (var f in logbook.EntryFields)
+                {
+                    foreach (var o in f.ActivityFieldOptionMappings)
+                    {
+                        conn.Execute("INSERT INTO LogbookEntryFieldOption (LogbookEntryId, FieldOptionId, Selected) " +
+                                     "VALUES (@LogbookEntryId, @FieldOptionId, @Selected)",
+                                     new { LogbookEntryId = entryId, FieldOptionId = o.FieldOptionId, Selected = o.Selected });
+                    }
+                }
+
             }
         }
 
@@ -131,6 +142,14 @@ namespace Logbook.Core
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
             {
                 return conn.Query<LogbookEntryDTO>("SELECT * FROM LogbookEntry WHERE LogbookId = @LogbookId", new { LogbookId = logbookId });
+            }
+        }
+
+        public static LogbookEntryDTO GetLogbookEntry(Guid logbookEntryId)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                return conn.Query<LogbookEntryDTO>("SELECT * FROM LogbookEntry WHERE LogbookEntryId = @LogbookEntryId", new { LogbookEntryId = logbookEntryId }).SingleOrDefault();
             }
         }
 
@@ -213,9 +232,10 @@ namespace Logbook.Core
         {
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
             {
-                var s = "SELECT * FROM Field WHERE ActivityId = @ActivityId";
+                var s = "SELECT * FROM Field WHERE ActivityId = @ActivityId ";
                 if (activeOnly)
                     s += " AND Active = 1";
+                s += " ORDER BY SortOrder";
                 return conn.Query<FieldDTO>(s, new { ActivityId = activityId });
             }
         }
@@ -256,15 +276,33 @@ namespace Logbook.Core
         {
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
             {
-                conn.Execute("INSERT INTO FieldOption (FieldId, Text, SortOrder) VALUES (@FieldId, @Text, (SELECT MAX(SortOrder) FROM FieldOption WHERE FieldId = @FieldId) + 1)", new { FieldId = fieldId, Text = text });
+                conn.Execute("INSERT INTO FieldOption (FieldId, Text, SortOrder) VALUES (@FieldId, @Text, (SELECT ISNULL(MAX(SortOrder), 0) FROM FieldOption WHERE FieldId = @FieldId) + 1)", new { FieldId = fieldId, Text = text });
             } 
         }
 
-        public static IEnumerable<ActivityFieldOptionMapping> GetFieldOptionMappings(Guid userId)
+        public static ActivityFieldOptionMapping[] GetFieldOptionMappings(Guid fieldId)
         {
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
             {
-                return conn.Query<ActivityFieldOptionMapping>("SELECT * FROM ActivityFieldOptionMapping WHERE UserId = @UserId", new { UserId = userId });
+                return conn.Query<ActivityFieldOptionMapping>("SELECT * FROM ActivityFieldOptionMapping WHERE FieldId = @FieldId AND OptionText IS NOT NULL ORDER BY FieldOptionSortOrder", new {FieldId = fieldId}).ToArray();
+            }
+        }
+
+        public static LogbookEntryFieldDTO[] GetFieldOptionMappings(Guid userId, Guid activityId)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                var fields = GetFields(activityId);
+                var mappings = fields.Select(f => new LogbookEntryFieldDTO() {Name = f.Name, ActivityFieldOptionMappings = GetFieldOptionMappings(f.FieldId) });
+                return mappings.Where(m => m.ActivityFieldOptionMappings.Length > 0).ToArray();
+            }
+        }
+
+        public static SelectedFieldOption[] GetSelectedFields(Guid logbookEntryId)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                return conn.Query<SelectedFieldOption>("SELECT Name AS FieldName, Text AS OptionText FROM SelectedFieldOption WHERE LogbookEntryId = @LogbookEntryId", new { LogbookEntryId = logbookEntryId }).ToArray();
             }
         }
     }

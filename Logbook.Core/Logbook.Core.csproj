@@ -46,10 +46,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccess.cs" />
+    <Compile Include="DTO\SelectedFieldOption.cs" />
     <Compile Include="DTO\ActivityFieldOptionMapping.cs" />
     <Compile Include="DTO\FieldOption.cs" />
     <Compile Include="DTO\Field.cs" />
     <Compile Include="DTO\Activity.cs" />
+    <Compile Include="DTO\LogbookEntryFieldOption.cs" />
+    <Compile Include="DTO\LogbookEntryField.cs" />
     <Compile Include="DTO\LogbookEntry.cs" />
     <Compile Include="DTO\Logbook.cs" />
     <Compile Include="DTO\Request.cs" />

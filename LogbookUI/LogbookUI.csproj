@@ -171,7 +171,6 @@
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Account\PasswordReset.cshtml" />
     <Content Include="Views\Logbook\Logbook.cshtml" />
-    <Content Include="Views\Logbook\AddEntry.cshtml" />
     <Content Include="Views\Logbook\CreateLogbook.cshtml" />
     <Content Include="Views\Logbook\AddLogbookEntry.cshtml" />
     <Content Include="Views\Logbook\MyLogbooks.cshtml" />
@@ -179,6 +178,7 @@
     <Content Include="Views\Settings\EditActivity.cshtml" />
     <Content Include="Views\Settings\EditField.cshtml" />
     <Content Include="Views\Settings\EditFieldOption.cshtml" />
+    <Content Include="Views\Logbook\LogbookEntry.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

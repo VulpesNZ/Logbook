@@ -18,11 +18,11 @@
             <td>Date</td>
             <td>Notes</td>
         </tr>
-        @foreach (LogbookEntryDTO entry in Model.Entries)
+        @foreach (LogbookEntryDTO entry in Model.Entries.OrderByDescending(e => e.EntryDate).ThenByDescending(e => e.CreateDate))
         {
             <tr>
-                <td>@DataAccess.GetActivity(entry.ActivityId).Name</td>
-                <td>@entry.EntryDate</td>
+                <td><a href="\logbookentry\@entry.LogbookEntryId">@DataAccess.GetActivity(entry.ActivityId).Name</a></td>
+                <td>@entry.EntryDate.ToString("dd/MM/yyyy")</td>
                 <td>@entry.Notes</td>
             </tr>
         }

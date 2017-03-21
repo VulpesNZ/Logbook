@@ -1,0 +1,35 @@
+﻿@using Logbook.Core
+@using Logbook.Core.DTO
+@model LogbookUI.Models.LogbookEntryViewModel
+@{
+    ViewBag.Title = "Logbook Entries";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.Logbook.Name - @Model.EntryDate.ToString("d MMMM yyyy")</h2>
+<br /><hr />
+<table>
+    <tr>
+        <td>@Html.LabelFor(m => m.ActivityId)</td>
+        <td>@DataAccess.GetActivity(Model.ActivityId).Name</td>
+    </tr>
+    <tr>
+        <td>@Html.LabelFor(m => m.EntryDate)</td>
+        <td>@Model.EntryDate</td>
+    </tr>
+    <tr>
+        <td>@Html.LabelFor(m => m.Notes)</td>
+        <td>@Model.Notes</td>
+    </tr>
+    <tr style="height:50px"></tr>
+    <tr><td><h4>Details</h4></td></tr>
+    @for (int i = 0; i < Model.SelectedFields.Count(); i++)
+    {
+        <tr>
+            <td><b>@Model.SelectedFields[i].FieldName</b></td>
+            <td>
+                @Model.SelectedFields[i].OptionText
+            </td>
+        </tr>
+                        }
+</table>

@@ -83,6 +83,8 @@
     <None Include="TemplateDataPopulation\template.FieldOption.sql" />
     <Build Include="StoredProcedures\PopulateDefaultActivities.sql" />
     <Build Include="Views\ActivityFieldOptionMapping.sql" />
+    <Build Include="Tables\LogbookEntryFieldOption.sql" />
+    <Build Include="Views\SelectedFieldOption.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="LogbookDB.refactorlog" />

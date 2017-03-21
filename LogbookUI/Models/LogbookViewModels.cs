@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
@@ -54,7 +55,30 @@ namespace LogbookUI.Models
         [Display(Name = "Notes")]
         public string Notes { get; set; }
 
-        public IEnumerable<ActivityFieldOptionMapping> ActivityFieldOptionMappings { get; set; }
+        public LogbookEntryFieldDTO[] LogbookEntryFields { get; set; }
+    }
+
+    public class LogbookEntryViewModel
+    {
+        public Guid LogbookEntryId { get; set; }
+
+        public Guid LogbookId { get; set; }
+
+        [Display(Name = "Activity")]
+        public Guid ActivityId { get; set; }
+        
+        [Display(Name = "Date")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime EntryDate { get; set; }
+
+        [Display(Name = "Notes")]
+        public string Notes { get; set; }
+
+        public SelectedFieldOption[] SelectedFields { get; set; }
+
+        [ReadOnly(true)]
+        public LogbookDTO Logbook { get; set; }
     }
 
     public class MyLogbooksViewModel

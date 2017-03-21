@@ -12,7 +12,7 @@ td {
     height: 50px;
 }
 
-tr:nth-child(even) {
+tr.alternatingrows:nth-child(even) {
     background-color: #dddddd;
 }
 

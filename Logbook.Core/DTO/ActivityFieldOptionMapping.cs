@@ -15,5 +15,6 @@ namespace Logbook.Core.DTO
         public Guid FieldOptionId { get; set; }
         public int FieldSortOrder { get; set; }
         public int FieldOptionSortOrder { get; set; }
+        public bool Selected { get; set; }
     }
 }

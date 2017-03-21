@@ -18,5 +18,6 @@ namespace Logbook.Core.DTO
         public string Status { get; set; }
         public DateTime EntryDate { get; set; }
         public string Notes { get; set; }
+        public LogbookEntryFieldDTO[] EntryFields { get; set; }
     }
 }
