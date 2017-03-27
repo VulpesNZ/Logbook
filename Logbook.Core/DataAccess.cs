@@ -24,11 +24,22 @@ namespace Logbook.Core
         {
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
             {
-                var result =
-                    conn.Execute(
-                        "INSERT INTO [User] (Email, PasswordHash, PasswordSalt, Name, Location, Status) VALUES (@Email, @PasswordHash, @PasswordSalt, @Name, @Location, @Status)",
-                        user);
-                return result == 1;
+                var userId =
+                    conn.Query<Guid>(
+                        "INSERT INTO [User] (Email, PasswordHash, PasswordSalt, Name, Location, Status) " +
+                        "OUTPUT inserted.UserId " +
+                        "VALUES (@Email, @PasswordHash, @PasswordSalt, @Name, @Location, @Status)",
+                        user).Single();
+                ResetActivitiesToDefault(userId);
+                return userId != Guid.NewGuid();
+            }
+        }
+
+        public static void ResetActivitiesToDefault(Guid userId)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                conn.Execute($"exec PopulateDefaultActivities '{userId}'");
             }
         }
 
@@ -91,9 +102,9 @@ namespace Logbook.Core
 
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
             {
-                conn.Execute("INSERT INTO Logbook (LogbookId, Name, DefaultActivityId, CreatedBy, UpdatedBy, Status) " +
-                                       "OUTPUT inserted.LogbookId " +
-                                       "VALUES (@LogbookId, @Name, @DefaultActivityId, @CreatedBy, @UpdatedBy, @Status)",
+                conn.Execute(   "INSERT INTO Logbook (LogbookId, UserId, Name, DefaultActivityId, CreatedBy, UpdatedBy, Status) " +
+                                "OUTPUT inserted.LogbookId " +
+                                "VALUES (@LogbookId, @UserId, @Name, @DefaultActivityId, @CreatedBy, @UpdatedBy, @Status)",
                     logbook);
             }
         }
@@ -126,13 +137,24 @@ namespace Logbook.Core
                     logbook).Single();
                 foreach (var f in logbook.EntryFields)
                 {
-                    foreach (var o in f.ActivityFieldOptionMappings)
+                    if (f.ActivityFieldOptionMappings != null)
                     {
-                        conn.Execute("INSERT INTO LogbookEntryFieldOption (LogbookEntryId, FieldOptionId, Selected) " +
-                                     "VALUES (@LogbookEntryId, @FieldOptionId, @Selected)",
-                                     new { LogbookEntryId = entryId, FieldOptionId = o.FieldOptionId, Selected = o.Selected });
+                        foreach (var o in f.ActivityFieldOptionMappings.Where(d => !string.IsNullOrEmpty(d.OptionText)))
+                        {
+                            conn.Execute(
+                                "INSERT INTO LogbookEntryFieldOption (LogbookEntryId, FieldOptionId, Selected) " +
+                                "VALUES (@LogbookEntryId, @FieldOptionId, @Selected)",
+                                new {LogbookEntryId = entryId, FieldOptionId = o.FieldOptionId, Selected = o.Selected});
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(f.CustomText))
+                    {
+                        conn.Execute("INSERT INTO LogbookEntryFieldOptionCustom(LogbookEntryId, FieldId, CustomValue) " +
+                                     "VALUES (@LogbookEntryId, @FieldId, @CustomValue)",
+                            new {LogbookEntryId = entryId, f.FieldId, CustomValue = f.CustomText});
                     }
                 }
+               
 
             }
         }
@@ -153,11 +175,11 @@ namespace Logbook.Core
             }
         }
 
-        public static IEnumerable<LogbookDTO> GetLogbooks()
+        public static IEnumerable<LogbookDTO> GetLogbooks(Guid userId)
         {
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
             {
-                return conn.Query<LogbookDTO>("SELECT * FROM Logbook");
+                return conn.Query<LogbookDTO>("SELECT * FROM Logbook WHERE UserId = @UserId AND Status = 'STATUS/ACTIVE'", new { UserId = userId });
             }
         }
 
@@ -180,6 +202,14 @@ namespace Logbook.Core
             }
         }
 
+        public static void DeleteField(Guid fieldId)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                conn.Execute("UPDATE Field SET Active = 0 WHERE FieldId = @FieldId", new { FieldId = fieldId });
+            }
+        }
+
         public static void AddUserActivity(Guid userId, string name)
         {
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
@@ -192,7 +222,8 @@ namespace Logbook.Core
         {
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
             {
-                conn.Execute("UPDATE Activity SET Name = @Name, Description = @Description WHERE ActivityId = @ActivityId", new { dto.ActivityId, dto.Name, dto.Description });
+                conn.Execute("UPDATE Activity SET Name = @Name, Description = @Description WHERE ActivityId = @ActivityId",
+                    new { dto.ActivityId, dto.Name, dto.Description });
             }
         }
 
@@ -200,7 +231,16 @@ namespace Logbook.Core
         {
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
             {
-                conn.Execute("UPDATE Field SET Name = @Name WHERE FieldId = @FieldId", new { dto.FieldId, dto.Name });
+                conn.Execute("UPDATE Field SET Name = @Name, AllowFreeText = @AllowFreeText, IsRequired = @IsRequired, IsMultiSelect = @IsMultiSelect WHERE FieldId = @FieldId",
+                    new { dto.FieldId, dto.Name, dto.AllowFreeText, dto.IsMultiSelect, dto.IsRequired });
+            }
+        }
+
+        public static void UpdateFieldOption(FieldOptionDTO dto)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                conn.Execute("UPDATE FieldOption SET Text = @Text WHERE FieldOptionId = @FieldOptionId", new { dto.FieldOptionId, dto.Text });
             }
         }
 
@@ -284,7 +324,7 @@ namespace Logbook.Core
         {
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
             {
-                return conn.Query<ActivityFieldOptionMapping>("SELECT * FROM ActivityFieldOptionMapping WHERE FieldId = @FieldId AND OptionText IS NOT NULL ORDER BY FieldOptionSortOrder", new {FieldId = fieldId}).ToArray();
+                return conn.Query<ActivityFieldOptionMapping>("SELECT * FROM ActivityFieldOptionMapping WHERE FieldId = @FieldId AND (OptionText IS NOT NULL OR AllowFreeText = 1) ORDER BY FieldOptionSortOrder", new {FieldId = fieldId}).ToArray();
             }
         }
 
@@ -293,8 +333,8 @@ namespace Logbook.Core
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
             {
                 var fields = GetFields(activityId);
-                var mappings = fields.Select(f => new LogbookEntryFieldDTO() {Name = f.Name, ActivityFieldOptionMappings = GetFieldOptionMappings(f.FieldId) });
-                return mappings.Where(m => m.ActivityFieldOptionMappings.Length > 0).ToArray();
+                var mappings = fields.Select(f => new LogbookEntryFieldDTO() {Name = f.Name, FieldId = f.FieldId, ActivityFieldOptionMappings = GetFieldOptionMappings(f.FieldId), AllowFreeText = f.AllowFreeText, IsMultiSelect = f.IsMultiSelect, IsRequired = f.IsRequired });
+                return mappings.Where(m => m.ActivityFieldOptionMappings.Length > 0 || m.AllowFreeText).ToArray();
             }
         }
 
@@ -305,5 +345,23 @@ namespace Logbook.Core
                 return conn.Query<SelectedFieldOption>("SELECT Name AS FieldName, Text AS OptionText FROM SelectedFieldOption WHERE LogbookEntryId = @LogbookEntryId", new { LogbookEntryId = logbookEntryId }).ToArray();
             }
         }
+
+        public static AnnouncementPreview[] GetAnnouncementPreviews()
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                return conn.Query<AnnouncementPreview>("SELECT AnnouncementId, Title, CASE WHEN LEN(Body) < 500 THEN Body ELSE CONVERT(VARCHAR(500), Body) + '...' END AS Body, PublishDate FROM Announcement WHERE PublishDate <= @Date", new { Date = DateTime.Today }).ToArray();
+            }
+        }
+
+        public static AnnouncementDTO GetAnnouncement(Guid announcementId)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                return conn.Query<AnnouncementDTO>("SELECT * FROM Announcement WHERE AnnouncementId = @AnnouncementId", new { AnnouncementId = announcementId }).SingleOrDefault();
+            }
+        }
+
+        
     }
 }

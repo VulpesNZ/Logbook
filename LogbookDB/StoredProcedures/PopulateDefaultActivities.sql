@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[PopulateDefaultActivities]
-	@UserId UNIQUEIDENTIFIER = '2E0975F1-0DF5-4F6D-BA6D-93768218CAA9'
+	@UserId UNIQUEIDENTIFIER
 AS
 
 -- Create the default set of activities and fields for a new user, or recreate them for an existing user on request.
@@ -29,11 +29,13 @@ WHEN MATCHED AND T.Active = 0 THEN UPDATE SET Active = 1;
 
 MERGE dbo.FieldOption AS T
 USING template.FieldOption S
-ON T.TemplateFieldOptionId = S.FieldOptionId
+ON T.TemplateFieldOptionId = S.FieldOptionId AND (SELECT UserId FROM Field WHERE FieldId = T.FieldId) = @UserId
 WHEN NOT MATCHED BY TARGET AND EXISTS (SELECT * FROM Field WHERE UserId = @UserId AND TemplateFieldId = S.FieldId) 
 	THEN INSERT (FieldId, Text, SortOrder, Active, TemplateFieldOptionId) 
 	VALUES ((SELECT TOP 1 Field.FieldId FROM dbo.Field WHERE UserId = @UserId AND Field.TemplateFieldId = S.FieldId)
 			, Text, SortOrder, Active, S.FieldOptionId)
 WHEN MATCHED AND T.Active = 0 THEN UPDATE SET Active = 1;
+
+COMMIT TRAN
 
 RETURN 0

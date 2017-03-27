@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[LogbookEntryFieldOption]
 (
-	[LogbookEntryId] UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(), 
+	[LogbookEntryId] UNIQUEIDENTIFIER NOT NULL, 
     [FieldOptionId] UNIQUEIDENTIFIER NOT NULL, 
     [Selected] BIT NOT NULL DEFAULT 1,
     CONSTRAINT [FK_LogbookEntryFieldOption_LogbookEntryId] FOREIGN KEY ([LogbookEntryId]) REFERENCES [LogbookEntry]([LogbookEntryId]), 

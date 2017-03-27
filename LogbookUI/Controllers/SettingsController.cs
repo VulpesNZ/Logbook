@@ -17,7 +17,7 @@ namespace LogbookUI.Controllers
         public ActionResult Settings()
         {
             var model = new ActivitySettingsViewModel();
-            model.Activities = DataAccess.GetActivitiesForUser(DataAccess.GetUser(User.Identity.GetUserName()).UserId);
+            model.Activities = DataAccess.GetActivitiesForUser(Guid.Parse(User.Identity.GetUserId()));
             return View(model);
         }
 
@@ -58,7 +58,7 @@ namespace LogbookUI.Controllers
         [HttpPost]
         public ActionResult AddUserActivity(string name)
         {
-            var activities = DataAccess.GetActivitiesForUser(DataAccess.GetUser(User.Identity.GetUserName()).UserId, false);
+            var activities = DataAccess.GetActivitiesForUser(Guid.Parse(User.Identity.GetUserId()), false);
             var existingActivity = activities.FirstOrDefault(a => a.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase));
             if (existingActivity != null)
             {
@@ -69,7 +69,7 @@ namespace LogbookUI.Controllers
             }
             else
             {
-                DataAccess.AddUserActivity(DataAccess.GetUser(User.Identity.GetUserName()).UserId, name);
+                DataAccess.AddUserActivity(Guid.Parse(User.Identity.GetUserId()), name);
             }
             return null;
         }
@@ -82,6 +82,9 @@ namespace LogbookUI.Controllers
             var dto = DataAccess.GetField(fieldId);
             model.FieldId = dto.FieldId;
             model.Name = dto.Name;
+            model.AllowFreeText = dto.AllowFreeText;
+            model.IsMultiSelect = dto.IsMultiSelect;
+            model.IsRequired = dto.IsRequired;
             model.FieldOptions = DataAccess.GetFieldOptions(fieldId);
             return View(model);
         }
@@ -93,6 +96,9 @@ namespace LogbookUI.Controllers
             var dto = new FieldDTO();
             dto.FieldId = model.FieldId;
             dto.Name = model.Name;
+            dto.AllowFreeText = model.AllowFreeText;
+            dto.IsMultiSelect = model.IsMultiSelect;
+            dto.IsRequired = model.IsRequired;
             DataAccess.UpdateField(dto);
             return RedirectToAction("EditActivity", "Settings", new { activityId = DataAccess.GetField(model.FieldId).ActivityId });
         }
@@ -107,6 +113,18 @@ namespace LogbookUI.Controllers
             model.Text = dto.Text;
             return View(model);
         }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult EditFieldOption(EditFieldOptionViewModel model)
+        {
+            var dto = new FieldOptionDTO();
+            dto.FieldOptionId = model.FieldOptionId;
+            dto.Text = model.Text;
+            DataAccess.UpdateFieldOption(dto);
+            return RedirectToAction("EditField", "Settings", new { fieldId = DataAccess.GetFieldOption(model.FieldOptionId).FieldId });
+        }
+
 
         [Authorize]
         [HttpPost]
@@ -123,8 +141,16 @@ namespace LogbookUI.Controllers
             }
             else
             {
-                DataAccess.AddField(DataAccess.GetUser(User.Identity.GetUserName()).UserId, activityId, fieldName);
+                DataAccess.AddField(Guid.Parse(User.Identity.GetUserId()), activityId, fieldName);
             }
+            return null;
+        }
+
+        [Authorize]
+        [HttpDelete]
+        public ActionResult RemoveField(Guid fieldId)
+        {
+            DataAccess.DeleteField(fieldId);
             return null;
         }
 

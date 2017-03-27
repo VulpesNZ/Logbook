@@ -37,17 +37,26 @@
     <table class="table-grid">
         <tr class="table-header">
             <td>Name</td>
-            <td>Required</td>
-            <td>Allow Multiple Selection</td>
-            <td>Allow Free Text Entry</td>
+            <td>Required Field</td>
+            <td>Allow Free-Type Values</td>
+            <td>Allow Multiple Selections</td>
         </tr>
         @foreach (FieldDTO field in Model.Fields.OrderBy(f => f.Name))
         {
-            <tr>
+            var fid = field.FieldId;
+            <tr id="@fid">
                 <td><a href="\Settings\EditField\@field.FieldId">@field.Name</a></td>
                 <td>@(field.IsRequired ? "Yes" : "No")</td>
-                <td>@(field.IsMultiSelect ? "Yes" : "No")</td>
                 <td>@(field.AllowFreeText ? "Yes" : "No")</td>
+                <td>@(field.IsMultiSelect ? "Yes" : "No")</td>
+                <td>
+                    @Ajax.ActionLink("Remove", "RemoveField", new { id = field.FieldId }, new AjaxOptions()
+                   {
+                       Confirm = "Are you sure you wish to permanently remove this field?",
+                       HttpMethod = "Delete",
+                       OnSuccess = "$('#" + @fid + "').remove(); "
+                   })
+                </td>
             </tr>
         }
         <tr>

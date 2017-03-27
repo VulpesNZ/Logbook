@@ -15,7 +15,7 @@
     </tr>
     <tr>
         <td>@Html.LabelFor(m => m.EntryDate)</td>
-        <td>@Model.EntryDate</td>
+        <td>@Model.EntryDate.ToString("d MMMM yyyy")</td>
     </tr>
     <tr>
         <td>@Html.LabelFor(m => m.Notes)</td>

@@ -13,12 +13,40 @@
     @Html.AntiForgeryToken()
     @Html.Hidden("FieldId", Model.FieldId, new { @id = "FieldId" })
 
-    <div class="form-group">
-        @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(model => model.Name)
-        </div>
-    </div>
+    <table>
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.Name, new { @class = "col-md-12 control-label" })
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Name)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.IsRequired, new { @class = "col-md-12 control-label" })
+            </td>
+            <td>
+                @Html.CheckBoxFor(model => model.IsRequired)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.AllowFreeText, new { @class = "col-md-12 control-label" })
+            </td>
+            <td>
+               @Html.CheckBoxFor(model => model.AllowFreeText)
+            </td>
+        </tr>
+        <tr>
+            <td>
+               @Html.LabelFor(m => m.IsMultiSelect, new { @class = "col-md-12 control-label" })
+            </td>
+            <td>
+                @Html.CheckBoxFor(model => model.IsMultiSelect)
+            </td>
+        </tr>
+    </table>
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">

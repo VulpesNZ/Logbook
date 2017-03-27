@@ -179,6 +179,7 @@
     <Content Include="Views\Settings\EditField.cshtml" />
     <Content Include="Views\Settings\EditFieldOption.cshtml" />
     <Content Include="Views\Logbook\LogbookEntry.cshtml" />
+    <Content Include="Views\Home\Announcement.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

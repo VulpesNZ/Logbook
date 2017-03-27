@@ -36,6 +36,13 @@ namespace LogbookUI.Models
         public string Name { get; set; }
 
         public IEnumerable<FieldOptionDTO> FieldOptions { get; set; }
+
+        [Display(Name = "Allow free-typed values")]
+        public bool AllowFreeText { get; set; }
+        [Display(Name = "Allow multiple selections")]
+        public bool IsMultiSelect { get; set; }
+        [Display(Name = "Required field")]
+        public bool IsRequired { get; set; }
     }
 
     public class EditFieldOptionViewModel

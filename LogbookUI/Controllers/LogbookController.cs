@@ -23,7 +23,7 @@ namespace LogbookUI.Controllers
         public ActionResult CreateLogbook()
         {
             var model = new CreateLogbookViewModel();
-            model.Activities = DataAccess.GetActivitiesForUser(DataAccess.GetUser(User.Identity.GetUserName()).UserId);
+            model.Activities = DataAccess.GetActivitiesForUser(Guid.Parse(User.Identity.GetUserId()));
             return View(model);
         }
 
@@ -32,11 +32,12 @@ namespace LogbookUI.Controllers
         public async Task<ActionResult> CreateLogbook(CreateLogbookViewModel model)
         {
             var logbook = new LogbookDTO();
+            logbook.UserId = Guid.Parse(User.Identity.GetUserId());
             logbook.Name = model.Name;
             logbook.DefaultActivityId = model.DefaultActivityId;
             logbook.Status = "STATUS/ACTIVE";
-            logbook.CreatedBy = Guid.Empty;
-            logbook.UpdatedBy = Guid.Empty;
+            logbook.CreatedBy = Guid.Parse(User.Identity.GetUserId());
+            logbook.UpdatedBy = Guid.Parse(User.Identity.GetUserId());
             logbook.CreateDate = DateTime.Now;
             logbook.UpdateDate = DateTime.Now;
             DataAccess.CreateLogbook(logbook);
@@ -69,11 +70,11 @@ namespace LogbookUI.Controllers
         public ActionResult AddLogbookEntry(Guid logbookId)
         {
             var model = new AddLogbookEntryViewModel();
-            model.Activities = DataAccess.GetActivitiesForUser(DataAccess.GetUser(User.Identity.GetUserName()).UserId);  //TODO: Unfuck this
+            model.Activities = DataAccess.GetActivitiesForUser(Guid.Parse(User.Identity.GetUserId()));  //TODO: Unfuck this
             model.LogbookId = logbookId;
             model.EntryDate = DateTime.Today;
             model.ActivityId = DataAccess.GetLogbook(logbookId).DefaultActivityId;
-            model.LogbookEntryFields = DataAccess.GetFieldOptionMappings(DataAccess.GetUser(User.Identity.GetUserName()).UserId, model.ActivityId);
+            model.LogbookEntryFields = DataAccess.GetFieldOptionMappings(Guid.Parse(User.Identity.GetUserId()), model.ActivityId);
             return View(model);
         }
 
@@ -85,8 +86,8 @@ namespace LogbookUI.Controllers
             logbook.LogbookId = model.LogbookId;
             logbook.ActivityId = model.ActivityId;
             logbook.Status = "STATUS/ACTIVE";
-            logbook.CreatedBy = Guid.Empty;
-            logbook.UpdatedBy = Guid.Empty;
+            logbook.CreatedBy = Guid.Parse(User.Identity.GetUserId());
+            logbook.UpdatedBy = Guid.Parse(User.Identity.GetUserId());
             logbook.CreateDate = DateTime.Now;
             logbook.UpdateDate = DateTime.Now;
             logbook.EntryDate = model.EntryDate;
@@ -108,7 +109,7 @@ namespace LogbookUI.Controllers
         public ActionResult MyLogbooks()
         {
             var model = new MyLogbooksViewModel();
-            model.Logbooks = DataAccess.GetLogbooks();
+            model.Logbooks = DataAccess.GetLogbooks(Guid.Parse(User.Identity.GetUserId()));
             return View(model);
         }
 

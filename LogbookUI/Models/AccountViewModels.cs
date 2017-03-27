@@ -18,6 +18,8 @@ namespace LogbookUI.Models
 
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
+
+        public string UserId { get; set; }
     }
 
     public class RegisterViewModel

@@ -33,7 +33,12 @@ namespace LogbookUI
                 "LogbookEntry",                                              // Route name
                 "LogbookEntry/{logbookEntryId}",                           // URL with parameters
                 new { controller = "Logbook", action = "LogbookEntry" }  // Parameter defaults
-            ); 
+            );
+            routes.MapRoute(
+                "EditLogbookEntry",                                              // Route name
+                "LogbookEntry/{logbookEntryId}/Edit",                           // URL with parameters
+                new { controller = "Logbook", action = "EditLogbookEntry" }  // Parameter defaults
+            );
 
 
 
@@ -75,11 +80,22 @@ namespace LogbookUI
                 "Settings/EditField/{fieldId}",                           // URL with parameters
                 new { controller = "Settings", action = "EditField" }  // Parameter defaults
             );
+            routes.MapRoute(
+                "Settings/RemoveField",                                              // Route name
+                "Settings/RemoveField/{fieldId}",                           // URL with parameters
+                new { controller = "Settings", action = "RemoveField" }  // Parameter defaults
+            );
 
             routes.MapRoute(
                 "Settings/EditFieldOption",                                              // Route name
                 "Settings/EditFieldOption/{fieldOptionId}",                           // URL with parameters
                 new { controller = "Settings", action = "EditFieldOption" }  // Parameter defaults
+            );
+
+            routes.MapRoute(
+                "Announcement",                                              // Route name
+                "Announcement/{announcementId}",                           // URL with parameters
+                new { controller = "Home", action = "Announcement" }  // Parameter defaults
             );
 
 

@@ -46,7 +46,7 @@ namespace LogbookUI.Controllers
                 return View(model);
             }
 
-            var result = await TryLogin(model.Email, model.Password);
+            var result = await TryLogin(model);
             switch (result)
             {
                 case "LOGINRESULT/USERNOTFOUND":
@@ -57,7 +57,7 @@ namespace LogbookUI.Controllers
                     return View(model);
                 case "LOGINRESULT/SUCCESS":
                     // sign in, set up authentication
-                    IdentitySignin(model.Email, model.Email, string.Empty, model.RememberMe);
+                    IdentitySignin(model.UserId, model.Email, string.Empty, model.RememberMe);
                     // redirect to home page
                     return RedirectToLocal(returnUrl);
                 default:
@@ -76,17 +76,17 @@ namespace LogbookUI.Controllers
             return RedirectToAction("Home", "Home");
         }
 
-        private Task<string> TryLogin(string email, string pass)
+        private Task<string> TryLogin(LoginViewModel model)
         {
             return Task<string>.Factory.StartNew(() =>
             {
-                var user = DataAccess.GetUser(email);
+                var user = DataAccess.GetUser(model.Email);
                 if (user == null)
                 {
                     return "LOGINRESULT/USERNOTFOUND";
                 }
                
-                var pbkdf2 = new Rfc2898DeriveBytes(pass, user.PasswordSalt, 1000);
+                var pbkdf2 = new Rfc2898DeriveBytes(model.Password, user.PasswordSalt, 1000);
                 var providedHash = pbkdf2.GetBytes(32);
                 var passwordCorrect = true;
                 for (var i = 0; i < 32; i++)
@@ -96,6 +96,8 @@ namespace LogbookUI.Controllers
                         passwordCorrect = false;
                     }
                 }
+                if (passwordCorrect)
+                    model.UserId = user.UserId.ToString();
 
                 return passwordCorrect ? "LOGINRESULT/SUCCESS" : "LOGINRESULT/INCORRECTPASSWORD";
             });
@@ -123,7 +125,7 @@ namespace LogbookUI.Controllers
                 var user = DataAccess.GetUser(model.Email);
                 if (user != null)
                 {
-                    ModelState.AddModelError("", "That email address is already in use.  If you think it's your account, you can <a href='account/resetpassword'>recover it here</a>.");
+                    ModelState.AddModelError("", "That email address is already in use.");
                     return View(model);
                 }
 

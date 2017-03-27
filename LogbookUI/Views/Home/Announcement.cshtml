@@ -1,0 +1,10 @@
+﻿  
+@model LogbookUI.Models.AnnouncementViewModel
+@{
+    ViewBag.Title = Model.Title;
+}
+  
+<h3>@Model.Title</h3>
+<span style="font-style: italic; font-size:smaller">Published on @Model.PublishDate.ToString("dd MMMM yyyy")</span>
+<br /><br />
+<p>@Model.Body</p>

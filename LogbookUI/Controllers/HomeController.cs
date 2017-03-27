@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Logbook.Core;
 using LogbookUI.Models;
 using Microsoft.AspNet.Identity;
 
@@ -20,6 +21,7 @@ namespace LogbookUI.Controllers
         public ActionResult Home()
         {
             var model = new HomeViewModel() { ActiveLogbookName = string.Empty };
+            model.Announcements = DataAccess.GetAnnouncementPreviews();
             return View(model);
         }
 
@@ -39,6 +41,17 @@ namespace LogbookUI.Controllers
         public ActionResult CreateLogbook()
         {
             return RedirectToAction("CreateLogbook", "Logbook");
+        }
+
+        [Authorize]
+        public ActionResult Announcement(Guid announcementId)
+        {
+            var model = new AnnouncementViewModel();
+            var announcement = DataAccess.GetAnnouncement(announcementId);
+            model.Title = announcement.Title;
+            model.Body = announcement.Body;
+            model.PublishDate = announcement.PublishDate;
+            return View(model);
         }
     }
 }

@@ -38,35 +38,36 @@
         @for (int i = 0; i < Model.LogbookEntryFields.Count(); i++)
         {
             var fieldName = Model.LogbookEntryFields[i].Name;
-            <tr>
-                <td><b>@fieldName</b></td>
-                <td><table class="table-grid">
-                    @{
-                        int rowCount = 0;
-                        for (int j = 0; j < Model.LogbookEntryFields[i].ActivityFieldOptionMappings.Count(); j++)
-                        {
-                            if (!string.IsNullOrEmpty(Model.LogbookEntryFields[i].ActivityFieldOptionMappings[j].OptionText))
+            @Html.HiddenFor(m => m.LogbookEntryFields[i].FieldId)
+            if (Model.LogbookEntryFields[i].AllowFreeText)
+            {
+                <tr>
+                    <td><b>@fieldName</b></td>
+                    <td>
+                        @Html.TextBoxFor(m => m.LogbookEntryFields[i].CustomText)
+                    </td>
+                </tr>
+            }
+            if (Model.LogbookEntryFields[i].ActivityFieldOptionMappings.Any(m => !string.IsNullOrEmpty(m.OptionText)))
+            {
+                <tr>
+                    <td style="vertical-align: top">@Html.Raw(Model.LogbookEntryFields[i].AllowFreeText ? "" : $"<b>{fieldName}</b>")</td>
+                    <td>
+                        <table class="table-grid">
+                            @for (int j = 0; j < Model.LogbookEntryFields[i].ActivityFieldOptionMappings.Count(); j++)
                             {
-                                @Html.HiddenFor(m => m.LogbookEntryFields[i].ActivityFieldOptionMappings[j].FieldOptionId);
-                                if (rowCount % 2 == 0)
-                                {
-                                    @Html.Raw("<tr><td />");
-                                }
-                                @Html.Raw("<td>");
-                                @Html.CheckBoxFor(m => m.LogbookEntryFields[i].ActivityFieldOptionMappings[j].Selected, new { Style = "margin-right: 10px; vertical-align:top"});
-                                @Html.Label(Model.LogbookEntryFields[i].ActivityFieldOptionMappings[j].OptionText ?? string.Empty, new { Style = "vertical-align:top" });
-                                @Html.Raw("</td></div>");
-                                if (rowCount % 2 == 1)
-                                {
-                                    @Html.Raw("</tr>");
-                                }
-                                rowCount++;
+                                <tr>
+                                    <td>
+                                        @Html.CheckBoxFor(m => m.LogbookEntryFields[i].ActivityFieldOptionMappings[j].Selected, new {Style = "margin-right: 10px; vertical-align:top"})
+                                        @Html.Label(Model.LogbookEntryFields[i].ActivityFieldOptionMappings[j].OptionText ?? string.Empty, new {Style = "vertical-align:top"})
+                                    </td>
+                                </tr>
                             }
-                        }
-                    }
-                </table></td>
-            </tr>
-        }
+                        </table>
+                    </td>
+                </tr>
+              }
+          }
     </table>
 
     <div class="form-group">

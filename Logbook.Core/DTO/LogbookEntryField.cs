@@ -16,6 +16,7 @@ namespace Logbook.Core.DTO
         public bool IsMultiSelect { get; set; }
         public bool IsRequired { get; set; }
         public bool Active { get; set; }
+        public string CustomText { get; set; }
         public ActivityFieldOptionMapping[] ActivityFieldOptionMappings { get; set; }
     }
 }

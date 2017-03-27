@@ -3,6 +3,18 @@
 @{
     ViewBag.Title = "Home";
 }
-  <div>
-      News, announcements etc go here.
-    </div>
+  
+@if (Model.Announcements.Length > 0)
+{
+    <table>
+        @foreach (var a in Model.Announcements)
+        {
+            <tr>
+                <td>
+                    <h3>@a.Title</h3>
+                    <p>@a.Body</p><a href="~/Announcement/@a.AnnouncementId">Read More...</a>
+                </td>
+            </tr>
+        }
+    </table>
+}

@@ -85,6 +85,8 @@
     <Build Include="Views\ActivityFieldOptionMapping.sql" />
     <Build Include="Tables\LogbookEntryFieldOption.sql" />
     <Build Include="Views\SelectedFieldOption.sql" />
+    <Build Include="Tables\Announcement.sql" />
+    <Build Include="Tables\LogbookEntryFieldOptionCustom.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="LogbookDB.refactorlog" />

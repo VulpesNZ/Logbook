@@ -16,5 +16,6 @@ namespace Logbook.Core.DTO
         public int FieldSortOrder { get; set; }
         public int FieldOptionSortOrder { get; set; }
         public bool Selected { get; set; }
+        public bool AllowFreeText { get; set; }
     }
 }
