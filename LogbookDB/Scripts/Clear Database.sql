@@ -1,0 +1,9 @@
+DELETE FROM LogbookEntryFieldOption
+DELETE FROM LogbookEntryFieldOptionCustom
+DELETE FROM FieldOption
+DELETE FROM Field
+DELETE FROM LogbookEntry
+DELETE FROM Logbook
+DELETE FROM Activity
+DELETE FROM Request
+DELETE FROM [User]

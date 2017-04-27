@@ -10,7 +10,7 @@
 <div style="float:left">@Model.Entries.Count() @(Model.Entries.Count() == 1 ? "entry" : "entries"), last updated @Model.LastUpdated.ToString("dd/MM/yyyy")</div>
 <div style="float:right">@Html.ActionLink(linkText: "Add Entry", actionName: "AddLogbookEntry", controllerName: "Logbook", routeValues: new { logbookId = Model.LogbookId }, htmlAttributes:null)</div>
 <br /><hr />
-@if (Model.Entries.Count() > 0)
+@if (Model.Entries.Any())
 {
     <table>
         <tr class="table-header">
@@ -24,6 +24,7 @@
                 <td><a href="\logbookentry\@entry.LogbookEntryId">@DataAccess.GetActivity(entry.ActivityId).Name</a></td>
                 <td>@entry.EntryDate.ToString("dd/MM/yyyy")</td>
                 <td>@entry.Notes</td>
+                <td>@Html.ActionLink(linkText: "Edit", actionName: "EditLogbookEntry", controllerName: "Logbook", routeValues: new { logbookEntryId = entry.LogbookEntryId }, htmlAttributes: null)</td>
             </tr>
         }
     </table>

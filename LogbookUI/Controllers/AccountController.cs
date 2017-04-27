@@ -145,13 +145,15 @@ namespace LogbookUI.Controllers
                 };
 
                 var result = DataAccess.CreateUser(user);
-                if (!result)
+                if (result == Guid.Empty)
                 {
                     ModelState.AddModelError("", "Sorry, something went wrong while creating your account. Please refresh the page and try again.");
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Registration Successful.");
+                    IdentitySignin(result.ToString(), model.Email, string.Empty, true);
+                    // redirect to home page
+                    return RedirectToLocal(string.Empty);
 
                 }
             }

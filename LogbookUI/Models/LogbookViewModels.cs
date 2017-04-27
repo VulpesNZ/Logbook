@@ -38,9 +38,10 @@ namespace LogbookUI.Models
         public IEnumerable<LogbookEntryDTO> Entries { get; set; }
     }
 
-    public class AddLogbookEntryViewModel
+    public class EditLogbookEntryViewModel
     {
         public Guid LogbookId { get; set; }
+        public Guid LogbookEntryId { get; set; }
 
         [Display(Name = "Activity")]
         public Guid ActivityId { get; set; }

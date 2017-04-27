@@ -69,18 +69,52 @@ namespace LogbookUI.Controllers
         [Authorize]
         public ActionResult AddLogbookEntry(Guid logbookId)
         {
-            var model = new AddLogbookEntryViewModel();
-            model.Activities = DataAccess.GetActivitiesForUser(Guid.Parse(User.Identity.GetUserId()));  //TODO: Unfuck this
+            var model = new EditLogbookEntryViewModel();
+            model.Activities = DataAccess.GetActivitiesForUser(Guid.Parse(User.Identity.GetUserId()));
             model.LogbookId = logbookId;
+            model.LogbookEntryId = Guid.Empty;
             model.EntryDate = DateTime.Today;
             model.ActivityId = DataAccess.GetLogbook(logbookId).DefaultActivityId;
             model.LogbookEntryFields = DataAccess.GetFieldOptionMappings(Guid.Parse(User.Identity.GetUserId()), model.ActivityId);
             return View(model);
         }
 
+        [Authorize]
+        public ActionResult EditLogbookEntry(Guid logbookEntryId)
+        {
+            var model = new EditLogbookEntryViewModel();
+            var entry = DataAccess.GetLogbookEntry(logbookEntryId);
+            var selections = DataAccess.GetSelectedFields(logbookEntryId);
+            model.Activities = DataAccess.GetActivitiesForUser(Guid.Parse(User.Identity.GetUserId()));
+            model.LogbookId = entry.LogbookId;
+            model.LogbookEntryId = logbookEntryId;
+            model.EntryDate = entry.EntryDate;
+            model.ActivityId = entry.ActivityId;
+            model.Notes = entry.Notes;
+            model.LogbookEntryFields = DataAccess.GetFieldOptionMappings(Guid.Parse(User.Identity.GetUserId()), model.ActivityId);
+            foreach (var field in model.LogbookEntryFields)
+            {
+                field.ActivityFieldOptionMappings = DataAccess.GetFieldOptionMappings(field.FieldId);
+            }
+            foreach (var selection in selections)
+            {
+                if (selection.FieldOptionId == Guid.Empty)
+                {
+                    model.LogbookEntryFields.Single(f => f.FieldId == selection.FieldId).CustomText = selection.OptionText;
+                }
+                else
+                {
+                    model.LogbookEntryFields.Single(f => f.FieldId == selection.FieldId)
+                        .ActivityFieldOptionMappings.Single(m => m.FieldOptionId == selection.FieldOptionId)
+                        .Selected = true;
+                }
+            }
+            return View(model);
+        }
+
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult> AddLogbookEntry(AddLogbookEntryViewModel model)
+        public async Task<ActionResult> AddLogbookEntry(EditLogbookEntryViewModel model)
         {
             var logbook = new LogbookEntryDTO();
             logbook.LogbookId = model.LogbookId;
@@ -92,9 +126,9 @@ namespace LogbookUI.Controllers
             logbook.UpdateDate = DateTime.Now;
             logbook.EntryDate = model.EntryDate;
             logbook.Notes = model.Notes;
-            logbook.EntryFields = model.LogbookEntryFields;
+            logbook.EntryFields = model.LogbookEntryFields ?? new LogbookEntryFieldDTO[0];
             DataAccess.AddLogbookEntry(logbook);
-            if (logbook.LogbookId == Guid.Empty)
+            if (logbook.LogbookEntryId == Guid.Empty)
             {
                 ModelState.AddModelError("", "Failed to create entry");
             }
@@ -103,6 +137,24 @@ namespace LogbookUI.Controllers
                 return RedirectToAction("Logbook", "Logbook", new { logbookId = logbook.LogbookId });
             }
             return View(model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<ActionResult> EditLogbookEntry(EditLogbookEntryViewModel model)
+        {
+            var logbook = new LogbookEntryDTO();
+            logbook.LogbookId = model.LogbookId;
+            logbook.LogbookEntryId = model.LogbookEntryId;
+            logbook.ActivityId = model.ActivityId;
+            logbook.Status = "STATUS/ACTIVE";
+            logbook.UpdatedBy = Guid.Parse(User.Identity.GetUserId());
+            logbook.UpdateDate = DateTime.Now;
+            logbook.EntryDate = model.EntryDate;
+            logbook.Notes = model.Notes;
+            logbook.EntryFields = model.LogbookEntryFields ?? new LogbookEntryFieldDTO[0];
+            DataAccess.UpdateLogbookEntry(logbook);
+            return RedirectToAction("LogbookEntry", "Logbook", new { logbookEntryId = logbook.LogbookEntryId });
         }
 
         [Authorize]
@@ -123,6 +175,7 @@ namespace LogbookUI.Controllers
             model.EntryDate = entry.EntryDate;
             model.Logbook = DataAccess.GetLogbook(entry.LogbookId);
             model.ActivityId = entry.ActivityId;
+            model.LogbookEntryId = logbookEntryId;
             // format the option selections for readability.
             var fields = DataAccess.GetSelectedFields(logbookEntryId);
             Dictionary<string,string> selectedFieldText = new Dictionary<string, string>();

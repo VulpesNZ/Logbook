@@ -60,9 +60,10 @@
     <Folder Include="Tables" />
     <Folder Include="Tables\Template" />
     <Folder Include="Schemas" />
-    <Folder Include="TemplateDataPopulation" />
+    <Folder Include="DataPopulation" />
     <Folder Include="StoredProcedures" />
     <Folder Include="Views" />
+    <Folder Include="PostDeploy" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\User.sql" />
@@ -80,22 +81,28 @@
     <Build Include="Schemas\template.sql" />
     <Build Include="Tables\Template\template.Field.sql" />
     <Build Include="Tables\Template\template.FieldOption.sql" />
-    <None Include="TemplateDataPopulation\template.FieldOption.sql" />
+    <None Include="DataPopulation\template.FieldOption.sql" />
     <Build Include="StoredProcedures\PopulateDefaultActivities.sql" />
     <Build Include="Views\ActivityFieldOptionMapping.sql" />
     <Build Include="Tables\LogbookEntryFieldOption.sql" />
     <Build Include="Views\SelectedFieldOption.sql" />
     <Build Include="Tables\Announcement.sql" />
     <Build Include="Tables\LogbookEntryFieldOptionCustom.sql" />
+    <Build Include="StoredProcedures\SelectFieldOption.sql" />
+    <Build Include="StoredProcedures\SetFieldCustomText.sql" />
+    <Build Include="StoredProcedures\GetActivitiesForApp.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="LogbookDB.refactorlog" />
   </ItemGroup>
   <ItemGroup>
     <None Include="local.publish.xml" />
-    <None Include="TemplateDataPopulation\template.Field.sql" />
+    <None Include="DataPopulation\template.Field.sql" />
+    <None Include="DataPopulation\Preference.sql" />
+    <None Include="production.publish.xml" />
   </ItemGroup>
   <ItemGroup>
-    <PostDeploy Include="TemplateDataPopulation\template.Activity.sql" />
+    <PostDeploy Include="DataPopulation\template.Activity.sql" />
+    <None Include="PostDeploy\Script.PostDeployment.sql" />
   </ItemGroup>
 </Project>

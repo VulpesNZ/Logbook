@@ -20,7 +20,7 @@ namespace Logbook.Core
             }
         }
 
-        public static bool CreateUser(UserDTO user)
+        public static Guid CreateUser(UserDTO user)
         {
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
             {
@@ -31,7 +31,7 @@ namespace Logbook.Core
                         "VALUES (@Email, @PasswordHash, @PasswordSalt, @Name, @Location, @Status)",
                         user).Single();
                 ResetActivitiesToDefault(userId);
-                return userId != Guid.NewGuid();
+                return userId;
             }
         }
 
@@ -40,6 +40,14 @@ namespace Logbook.Core
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
             {
                 conn.Execute($"exec PopulateDefaultActivities '{userId}'");
+            }
+        }
+
+        public static ActivityForAppDTO[] GetActivitiesForApp(Guid userId)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                return conn.Query<ActivityForAppDTO>($"exec GetActivitiesForApp '{userId}'").ToArray();
             }
         }
 
@@ -125,6 +133,35 @@ namespace Logbook.Core
             }
         }
 
+        public static void UpdateLogbookEntry(LogbookEntryDTO logbook)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                conn.Execute("UPDATE LogbookEntry " +
+                             "SET UpdatedBy = @UpdatedBy, UpdateDate = @UpdateDate, Status = @Status, EntryDate = @EntryDate, Notes = @Notes " +
+                             "WHERE LogbookEntryId = @LogbookEntryId",
+                    logbook);
+                foreach (var f in logbook.EntryFields)
+                {
+                    if (f.ActivityFieldOptionMappings != null)
+                    {
+                        foreach (var o in f.ActivityFieldOptionMappings.Where(d => !string.IsNullOrEmpty(d.OptionText)))
+                        {
+                            conn.Execute(
+                                "EXEC SelectFieldOption @LogbookEntryId, @FieldOptionId, @Selected",
+                                new { logbook.LogbookEntryId, o.FieldOptionId, o.Selected });
+                        }
+                    }
+                    if (f.CustomText != null)
+                    {
+                        conn.Execute(
+                                    "EXEC SetFieldCustomText @LogbookEntryId, @FieldId, @CustomText",
+                                    new { logbook.LogbookEntryId, f.FieldId, f.CustomText });
+                    }
+                }
+            }
+        }
+
         public static void AddLogbookEntry(LogbookEntryDTO logbook)
         {
             logbook.LogbookEntryId = Guid.NewGuid();
@@ -154,8 +191,6 @@ namespace Logbook.Core
                             new {LogbookEntryId = entryId, f.FieldId, CustomValue = f.CustomText});
                     }
                 }
-               
-
             }
         }
 
@@ -342,7 +377,7 @@ namespace Logbook.Core
         {
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
             {
-                return conn.Query<SelectedFieldOption>("SELECT Name AS FieldName, Text AS OptionText FROM SelectedFieldOption WHERE LogbookEntryId = @LogbookEntryId", new { LogbookEntryId = logbookEntryId }).ToArray();
+                return conn.Query<SelectedFieldOption>("SELECT FieldId, FieldOptionId, Name AS FieldName, Text AS OptionText FROM SelectedFieldOption WHERE LogbookEntryId = @LogbookEntryId", new { LogbookEntryId = logbookEntryId }).ToArray();
             }
         }
 

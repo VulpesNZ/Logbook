@@ -9,6 +9,8 @@ namespace Logbook.Core.DTO
     public class SelectedFieldOption
     {
         public Guid LogbookEntryId { get; set; }
+        public Guid FieldId { get; set; }
+        public Guid FieldOptionId { get; set; }
         public string FieldName { get; set; }
         public string OptionText { get; set; }
     }

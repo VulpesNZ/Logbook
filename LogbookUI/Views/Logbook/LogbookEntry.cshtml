@@ -7,6 +7,8 @@
 }
 
 <h2>@Model.Logbook.Name - @Model.EntryDate.ToString("d MMMM yyyy")</h2>
+<div style="float:right">@Html.ActionLink(linkText: "Edit", actionName: "EditLogbookEntry", controllerName: "Logbook", routeValues: new { logbookEntryId = Model.LogbookEntryId }, htmlAttributes: null)</div>
+
 <br /><hr />
 <table>
     <tr>
@@ -21,15 +23,18 @@
         <td>@Html.LabelFor(m => m.Notes)</td>
         <td>@Model.Notes</td>
     </tr>
-    <tr style="height:50px"></tr>
-    <tr><td><h4>Details</h4></td></tr>
-    @for (int i = 0; i < Model.SelectedFields.Count(); i++)
+    @if (Model.SelectedFields.Any())
     {
-        <tr>
-            <td><b>@Model.SelectedFields[i].FieldName</b></td>
-            <td>
-                @Model.SelectedFields[i].OptionText
-            </td>
-        </tr>
-                        }
+        <tr style="height: 50px"></tr>
+        <tr><td><h4>Details</h4></td></tr>
+        for (int i = 0; i < Model.SelectedFields.Count(); i++)
+         {
+             <tr>
+                 <td><b>@Model.SelectedFields[i].FieldName</b></td>
+                 <td>
+                     @Model.SelectedFields[i].OptionText
+                 </td>
+             </tr>
+         }
+    }
 </table>
