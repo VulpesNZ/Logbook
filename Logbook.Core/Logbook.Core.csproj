@@ -49,6 +49,7 @@
     <Compile Include="DTO\ActivityForAppDTO.cs" />
     <Compile Include="DTO\Announcement.cs" />
     <Compile Include="DTO\AnnouncementPreview.cs" />
+    <Compile Include="DTO\EntryFromApp.cs" />
     <Compile Include="DTO\SelectedFieldOption.cs" />
     <Compile Include="DTO\ActivityFieldOptionMapping.cs" />
     <Compile Include="DTO\FieldOption.cs" />

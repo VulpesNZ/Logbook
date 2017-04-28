@@ -26,5 +26,42 @@ namespace LogbookUI.Controllers
         {
             return DataAccess.GetActivitiesForApp(userid);
         }
+
+        [System.Web.Mvc.AllowAnonymous]
+        [System.Web.Http.HttpGet]
+        public LogbookDTO[] GetLogbooksForUser(Guid userId)
+        {
+            return DataAccess.GetLogbooks(userId).ToArray();
+        }
+
+        [System.Web.Mvc.AllowAnonymous]
+        [System.Web.Http.HttpPost]
+        public bool CreateEntry(Guid userId, EntryFromAppJSON entry)
+        {
+            var entryDTO = new LogbookEntryDTO();
+
+            entryDTO.LogbookEntryId = entry.entryId;
+
+            entryDTO.EntryDate = entry.date;
+            entryDTO.ActivityId = entry.activityId;
+            entryDTO.CreateDate = DateTime.Now;
+            entryDTO.CreatedBy = userId;
+            entryDTO.LogbookId = entry.logbookId;
+            entryDTO.Notes = entry.notes;
+            entryDTO.Status = "STATUS/ACTIVE";
+
+            var fieldOptions = new List<LogbookEntryFieldDTO>();
+            foreach (var fieldOption in entry.selectedFieldOptions)
+            {
+                //fieldOptions.Add(new LogbookEntryFieldDTO() {  });
+            }
+            entryDTO.EntryFields = fieldOptions.ToArray();
+
+            DataAccess.AddLogbookEntry(entryDTO);
+
+            // need to return a success message only if it's definitely here, so the app knows.
+            // also need to make sure that trying to add the same entry twice doesn't cause an issue.  App should be providing unique GUIDs so just check if it already exists.
+            return false;
+        }
     }
 }

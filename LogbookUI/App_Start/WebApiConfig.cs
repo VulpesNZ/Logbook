@@ -19,6 +19,12 @@ namespace LogbookUI
                 routeTemplate: "api/activities/{userid}", 
                 defaults: new { controller = "Api", action = "GetActivitiesForApp" }
             );
+            config.Routes.MapHttpRoute(
+                name: "GetLogbooksForUser",
+                routeTemplate: "api/logbooks/{userid}",
+                defaults: new { controller = "Api", action = "GetLogbooksForUser" }
+            );
+
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
