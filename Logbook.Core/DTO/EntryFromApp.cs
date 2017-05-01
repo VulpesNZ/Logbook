@@ -8,6 +8,7 @@ namespace Logbook.Core.DTO
 {
     public class EntryFromAppJSON
     {
+        public Guid userId { get; set; }
         public Guid entryId { get; set; }
         public Guid logbookId { get; set; }
         public Guid activityId { get; set; }

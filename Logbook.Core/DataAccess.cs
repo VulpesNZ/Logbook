@@ -19,6 +19,14 @@ namespace Logbook.Core
                 return conn.Query<UserDTO>("SELECT TOP 1 * FROM [User] WHERE Email = '" + email + "'").FirstOrDefault();
             }
         }
+        public static UserDTO GetUser(Guid userId)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                return conn.Query<UserDTO>("SELECT TOP 1 * FROM [User] WHERE UserId = @UserId",
+                            new { UserId = userId }).FirstOrDefault();
+            }
+        }
 
         public static Guid CreateUser(UserDTO user)
         {
@@ -191,6 +199,17 @@ namespace Logbook.Core
                             new {LogbookEntryId = entryId, f.FieldId, CustomValue = f.CustomText});
                     }
                 }
+            }
+        }
+
+        public static IEnumerable<LogbookEntryForAppDTO> GetAllEntries(Guid userId)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                return conn.Query<LogbookEntryForAppDTO>("SELECT *, Activity.Name AS ActivityName, EntryDate AS Date FROM LogbookEntry " +
+                                                   "JOIN Logbook ON Logbook.LogbookId = LogbookEntry.LogbookId " +
+                                                   "JOIN Activity ON Activity.ActivityId = LogbookEntry.ActivityId " +
+                                                   "WHERE Logbook.UserId = @UserId", new { UserId = userId });
             }
         }
 
@@ -378,6 +397,22 @@ namespace Logbook.Core
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
             {
                 return conn.Query<SelectedFieldOption>("SELECT FieldId, FieldOptionId, Name AS FieldName, Text AS OptionText FROM SelectedFieldOption WHERE LogbookEntryId = @LogbookEntryId", new { LogbookEntryId = logbookEntryId }).ToArray();
+            }
+        }
+
+        public static SelectedFieldOptionForAppDTO[] GetSelectedFieldsForApp(Guid logbookEntryId)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                return conn.Query<SelectedFieldOptionForAppDTO>("SELECT FieldId, FieldOptionId, Name AS FieldName, Text as fieldOptionText FROM SelectedFieldOption WHERE LogbookEntryId = @LogbookEntryId AND FieldOptionId IS NOT NULL", new { LogbookEntryId = logbookEntryId }).ToArray();
+            }
+        }
+
+        public static CustomFieldValueForApp[] GetCustomFieldsForApp(Guid logbookEntryId)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                return conn.Query<CustomFieldValueForApp>("SELECT FieldId, Text AS CustomText, Name AS FieldName FROM SelectedFieldOption WHERE LogbookEntryId = @LogbookEntryId AND FieldOptionId IS NULL", new { LogbookEntryId = logbookEntryId }).ToArray();
             }
         }
 

@@ -24,6 +24,26 @@ namespace LogbookUI
                 routeTemplate: "api/logbooks/{userid}",
                 defaults: new { controller = "Api", action = "GetLogbooksForUser" }
             );
+            config.Routes.MapHttpRoute(
+                name: "Ping",
+                routeTemplate: "api/ping/",
+                defaults: new { controller = "Api", action = "Ping" }
+            );
+            config.Routes.MapHttpRoute(
+                name: "CreateEntry",
+                routeTemplate: "api/CreateEntry/",
+                defaults: new { controller = "Api", action = "CreateEntry" }
+            );
+            config.Routes.MapHttpRoute(
+                name: "GetEntries",
+                routeTemplate: "api/getentries/{userId}",
+                defaults: new { controller = "Api", action = "GetEntries" }
+            );
+            config.Routes.MapHttpRoute(
+                name: "Login",
+                routeTemplate: "api/login/",
+                defaults: new { controller = "Api", action = "Login" }
+            );
 
 
             config.Routes.MapHttpRoute(
