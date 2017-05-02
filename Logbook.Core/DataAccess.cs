@@ -412,7 +412,7 @@ namespace Logbook.Core
         {
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
             {
-                return conn.Query<CustomFieldValueForApp>("SELECT FieldId, Text AS CustomText, Name AS FieldName FROM SelectedFieldOption WHERE LogbookEntryId = @LogbookEntryId AND FieldOptionId IS NULL", new { LogbookEntryId = logbookEntryId }).ToArray();
+                return conn.Query<CustomFieldValueForApp>("SELECT FieldId, Text AS CustomValue, Name AS FieldName FROM SelectedFieldOption WHERE LogbookEntryId = @LogbookEntryId AND FieldOptionId IS NULL", new { LogbookEntryId = logbookEntryId }).ToArray();
             }
         }
 

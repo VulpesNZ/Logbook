@@ -1,6 +1,19 @@
 ﻿@using Logbook.Core
 @using Logbook.Core.DTO
 @model LogbookUI.Models.MyLogbooksViewModel
+
+@functions {
+    private string GetLatestEntry(IEnumerable<LogbookEntryDTO> entries)
+    {
+        if (entries.Any())
+        {
+
+            return entries.OrderByDescending(e => e.EntryDate).First().EntryDate.ToString("dd/MM/yyyy");
+        }
+        return "-";
+    }
+
+}
 @{
     ViewBag.Title = "My Logbooks";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -24,7 +37,7 @@
             <tr>
                 <td><a href="\logbook\@logbook.LogbookId">@logbook.Name</a></td>
                 <td>@(logbook.DefaultActivityId != Guid.Empty ? DataAccess.GetActivity(logbook.DefaultActivityId).Name : string.Empty)</td>
-                <td>@DataAccess.GetLogbookEntries(logbook.LogbookId).OrderByDescending(e => e.EntryDate).First().EntryDate.ToString("dd/MM/yyyy")</td>
+                <td>@GetLatestEntry(DataAccess.GetLogbookEntries(logbook.LogbookId))</td>
                 <td>@DataAccess.GetLogbookEntries(logbook.LogbookId).Count().HyphenIfZero()</td>
                 <td><a href="\Logbook\@logbook.LogbookId\AddEntry">Add Entry</a></td>
             </tr>

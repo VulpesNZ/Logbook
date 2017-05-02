@@ -22,7 +22,8 @@ namespace Logbook.Core.DTO
     public class SelectedFieldOptionFromAppJSON
     {
         public Guid fieldId { get; set; }
-        public FieldOptionDTO fieldOption { get; set; }
+        public string fieldName { get; set; }
+        public Guid fieldOptionId { get; set; }
     }
 
     public class FieldCustomValueFromAppJSON

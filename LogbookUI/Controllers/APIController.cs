@@ -114,16 +114,15 @@ namespace LogbookUI.Controllers
             var fieldOptionsToSave = new List<LogbookEntryFieldDTO>();
             foreach (var field in entry.selectedFieldOptions)
             {
-                //fieldOptions.Add(new LogbookEntryFieldDTO() {  });
                 var dbField = DataAccess.GetField(field.fieldId);
-                var dbFieldOption = DataAccess.GetFieldOption(field.fieldOption.FieldOptionId);
+                var dbFieldOption = DataAccess.GetFieldOption(field.fieldOptionId);
                 var fieldOptionMappings = new List<ActivityFieldOptionMapping>
                 {
                     new ActivityFieldOptionMapping()
                     {
                         FieldId = dbField.FieldId,
                         ActivityId = dbField.ActivityId,
-                        FieldOptionId = field.fieldOption.FieldOptionId,
+                        FieldOptionId = field.fieldOptionId,
                         FieldName = dbField.Name,
                         OptionText = dbFieldOption.Text,
                         Selected = true
@@ -137,6 +136,20 @@ namespace LogbookUI.Controllers
                     Active = true,
                     ActivityId = entry.activityId,
                     ActivityFieldOptionMappings = fieldOptionMappings.ToArray()
+                });
+            }
+            foreach (var field in entry.fieldCustomValues)
+            {
+                var dbField = DataAccess.GetField(field.fieldId);
+                fieldOptionsToSave.Add(new LogbookEntryFieldDTO()
+                {
+                    Name = dbField.Name,
+                    FieldId = dbField.FieldId,
+                    LogbookId = entry.logbookId,
+                    Active = true,
+                    ActivityId = entry.activityId,
+                    CustomText = field.customValue,
+                    ActivityFieldOptionMappings = new List<ActivityFieldOptionMapping>().ToArray()
                 });
             }
             entryDTO.EntryFields = fieldOptionsToSave.ToArray();
