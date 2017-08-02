@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography;
+using System.Text;
 using System.Web.Http;
 using System.Web.Mvc;
 using Logbook.Core;
@@ -14,12 +15,27 @@ namespace LogbookUI.Controllers
 {
     public class APIController : ApiController
     {
+        // Nuke it from orbit
 
         [System.Web.Mvc.AllowAnonymous]
         [System.Web.Http.HttpGet]
         public ActivityForAppDTO[] GetActivitiesForApp(Guid userid)
         {
             return DataAccess.GetActivitiesForApp(userid);
+        }
+
+        [System.Web.Mvc.AllowAnonymous]
+        [System.Web.Http.HttpGet]
+        public FieldDTO[] GetFieldsForUser(Guid userid)
+        {
+            return DataAccess.GetFieldsForUser(userid).ToArray();
+        }
+
+        [System.Web.Mvc.AllowAnonymous]
+        [System.Web.Http.HttpGet]
+        public FieldOptionDTO[] GetFieldOptionsForUser(Guid userid)
+        {
+            return DataAccess.GetFieldOptionsForUser(userid).ToArray();
         }
 
         [System.Web.Mvc.AllowAnonymous]
@@ -45,8 +61,8 @@ namespace LogbookUI.Controllers
             {
                 entry.selectedFieldOptions = DataAccess.GetSelectedFieldsForApp(entry.entryId);
                 entry.fieldCustomValues = DataAccess.GetCustomFieldsForApp(entry.entryId);
-                entry.synced = true;
-                entry.formattedDate = entry.date.ToString("dd-MMM-yyyy");
+                entry.syncStatus = "SYNCED";
+                entry.formattedDate = GetFormattedDate(entry.date);
             }
             return entries.ToArray();
         }
@@ -161,6 +177,28 @@ namespace LogbookUI.Controllers
         {
             public string Username { get; set; }
             public string Password { get; set; }
+        }
+
+        public string GetFormattedDate(DateTime d)
+        {
+            var s = new StringBuilder(d.Day.ToString());
+            switch (d.Day.ToString().PadLeft(2, '0').Substring(1, 1))
+            {
+                case "1":
+                    s.Append("st");
+                    break;
+                case "2":
+                    s.Append("nd");
+                    break;
+                case "3":
+                    s.Append("rd");
+                    break;
+                default:
+                    s.Append("th");
+                    break;
+            }
+            s.AppendFormat(" {0:MMMM yyyy}", d);
+            return s.ToString();
         }
     }
 }

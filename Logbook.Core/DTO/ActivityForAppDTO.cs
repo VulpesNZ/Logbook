@@ -10,14 +10,6 @@ namespace Logbook.Core.DTO
     {
         public Guid ActivityId { get; set; }
         public string ActivityName { get; set; }
-
-        public Guid FieldId { get; set; }
-        public string FieldName { get; set; }
-        public int FieldSortOrder { get; set; }
-
-        public Guid FieldOptionId { get; set; }
-        public string FieldOptionText { get; set; }
-        public int FieldOptionSortOrder { get; set; }
     }
 }
 

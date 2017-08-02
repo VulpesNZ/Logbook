@@ -40,6 +40,16 @@ namespace LogbookUI
                 defaults: new { controller = "Api", action = "GetEntries" }
             );
             config.Routes.MapHttpRoute(
+                name: "GetFields",
+                routeTemplate: "api/getfields/{userId}",
+                defaults: new { controller = "Api", action = "GetFieldsForUser" }
+            );
+            config.Routes.MapHttpRoute(
+                name: "GetFieldOptions",
+                routeTemplate: "api/getfieldoptions/{userId}",
+                defaults: new { controller = "Api", action = "GetFieldOptionsForUser" }
+            );
+            config.Routes.MapHttpRoute(
                 name: "Login",
                 routeTemplate: "api/login/",
                 defaults: new { controller = "Api", action = "Login" }

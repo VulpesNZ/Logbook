@@ -233,7 +233,7 @@ namespace Logbook.Core
         {
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
             {
-                return conn.Query<LogbookDTO>("SELECT * FROM Logbook WHERE UserId = @UserId AND Status = 'STATUS/ACTIVE'", new { UserId = userId });
+                return conn.Query<LogbookDTO>("SELECT LogbookId, UpdateDate, Name, DefaultActivityId FROM Logbook WHERE UserId = @UserId AND Status = 'STATUS/ACTIVE'", new { UserId = userId });
             }
         }
 
@@ -331,6 +331,30 @@ namespace Logbook.Core
                     s += " AND Active = 1";
                 s += " ORDER BY SortOrder";
                 return conn.Query<FieldDTO>(s, new { ActivityId = activityId });
+            }
+        }
+
+        public static IEnumerable<FieldDTO> GetFieldsForUser(Guid userId, bool activeOnly = true)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                var s = "SELECT * FROM Field WHERE UserId = @UserId ";
+                if (activeOnly)
+                    s += " AND Active = 1";
+                s += " ORDER BY SortOrder";
+                return conn.Query<FieldDTO>(s, new { UserId = userId });
+            }
+        }
+
+        public static IEnumerable<FieldOptionDTO> GetFieldOptionsForUser(Guid userId, bool activeOnly = true)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                var s = "SELECT FieldOption.* FROM FieldOption JOIN Field ON Field.FieldId = FieldOption.FieldId WHERE UserId = @UserId ";
+                if (activeOnly)
+                    s += " AND FieldOption.Active = 1";
+                s += " ORDER BY FieldOption.SortOrder";
+                return conn.Query<FieldOptionDTO>(s, new { UserId = userId });
             }
         }
 

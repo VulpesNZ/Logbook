@@ -24,6 +24,6 @@ namespace Logbook.Core.DTO
         public LogbookEntryFieldDTO[] entryFields { get; set; }
         public SelectedFieldOptionForAppDTO[] selectedFieldOptions { get; set; }
         public CustomFieldValueForApp[] fieldCustomValues { get; set; }
-        public bool synced { get; set; }
+        public string syncStatus { get; set; }
     }
 }
