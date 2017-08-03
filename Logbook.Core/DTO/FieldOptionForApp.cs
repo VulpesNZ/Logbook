@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace Logbook.Core.DTO
 {
-    public class CustomFieldValueForApp
-    { 
+    public class FieldOptionForAppDTO
+    {
+        public Guid fieldOptionId { get; set; }
         public Guid fieldId { get; set; }
-        public string customValue { get; set; }
+        public string text { get; set; }
+        public int sortOrder { get; set; }
     }
 }

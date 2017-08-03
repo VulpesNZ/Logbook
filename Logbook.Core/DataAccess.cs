@@ -233,7 +233,15 @@ namespace Logbook.Core
         {
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
             {
-                return conn.Query<LogbookDTO>("SELECT LogbookId, UpdateDate, Name, DefaultActivityId FROM Logbook WHERE UserId = @UserId AND Status = 'STATUS/ACTIVE'", new { UserId = userId });
+                return conn.Query<LogbookDTO>("SELECT * FROM Logbook WHERE UserId = @UserId AND Status = 'STATUS/ACTIVE'", new { UserId = userId });
+            }
+        }
+
+        public static IEnumerable<LogbookForAppDTO> GetLogbooksForApp(Guid userId)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                return conn.Query<LogbookForAppDTO>("SELECT LogbookId, UpdateDate, Name, DefaultActivityId FROM Logbook WHERE UserId = @UserId AND Status = 'STATUS/ACTIVE'", new { UserId = userId });
             }
         }
 
@@ -334,19 +342,19 @@ namespace Logbook.Core
             }
         }
 
-        public static IEnumerable<FieldDTO> GetFieldsForUser(Guid userId, bool activeOnly = true)
+        public static IEnumerable<FieldForAppDTO> GetFieldsForUser(Guid userId, bool activeOnly = true)
         {
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
             {
-                var s = "SELECT * FROM Field WHERE UserId = @UserId ";
+                var s = "SELECT fieldId, activityId, name, allowFreeText, sortOrder, isRequired FROM Field WHERE UserId = @UserId ";
                 if (activeOnly)
                     s += " AND Active = 1";
                 s += " ORDER BY SortOrder";
-                return conn.Query<FieldDTO>(s, new { UserId = userId });
+                return conn.Query<FieldForAppDTO>(s, new { UserId = userId });
             }
         }
 
-        public static IEnumerable<FieldOptionDTO> GetFieldOptionsForUser(Guid userId, bool activeOnly = true)
+        public static IEnumerable<FieldOptionForAppDTO> GetFieldOptionsForUser(Guid userId, bool activeOnly = true)
         {
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
             {
@@ -354,7 +362,7 @@ namespace Logbook.Core
                 if (activeOnly)
                     s += " AND FieldOption.Active = 1";
                 s += " ORDER BY FieldOption.SortOrder";
-                return conn.Query<FieldOptionDTO>(s, new { UserId = userId });
+                return conn.Query<FieldOptionForAppDTO>(s, new { UserId = userId });
             }
         }
 

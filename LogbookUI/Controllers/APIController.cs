@@ -26,23 +26,23 @@ namespace LogbookUI.Controllers
 
         [System.Web.Mvc.AllowAnonymous]
         [System.Web.Http.HttpGet]
-        public FieldDTO[] GetFieldsForUser(Guid userid)
+        public FieldForAppDTO[] GetFieldsForUser(Guid userid)
         {
             return DataAccess.GetFieldsForUser(userid).ToArray();
         }
 
         [System.Web.Mvc.AllowAnonymous]
         [System.Web.Http.HttpGet]
-        public FieldOptionDTO[] GetFieldOptionsForUser(Guid userid)
+        public FieldOptionForAppDTO[] GetFieldOptionsForUser(Guid userid)
         {
             return DataAccess.GetFieldOptionsForUser(userid).ToArray();
         }
 
         [System.Web.Mvc.AllowAnonymous]
         [System.Web.Http.HttpGet]
-        public LogbookDTO[] GetLogbooksForUser(Guid userId)
+        public LogbookForAppDTO[] GetLogbooksForUser(Guid userId)
         {
-            return DataAccess.GetLogbooks(userId).ToArray();
+            return DataAccess.GetLogbooksForApp(userId).ToArray();
         }
 
         [System.Web.Mvc.AllowAnonymous]
@@ -59,10 +59,9 @@ namespace LogbookUI.Controllers
             var entries = DataAccess.GetAllEntries(userId);
             foreach (var entry in entries)
             {
-                entry.selectedFieldOptions = DataAccess.GetSelectedFieldsForApp(entry.entryId);
-                entry.fieldCustomValues = DataAccess.GetCustomFieldsForApp(entry.entryId);
+                entry.selectedFieldOptions = DataAccess.GetSelectedFieldsForApp(entry.logbookEntryId);
+                entry.fieldCustomValues = DataAccess.GetCustomFieldsForApp(entry.logbookEntryId);
                 entry.syncStatus = "SYNCED";
-                entry.formattedDate = GetFormattedDate(entry.date);
             }
             return entries.ToArray();
         }

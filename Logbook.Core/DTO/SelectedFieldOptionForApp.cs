@@ -10,7 +10,5 @@ namespace Logbook.Core.DTO
     {
         public Guid fieldId { get; set; }
         public Guid fieldOptionId { get; set; }
-        public string fieldName { get; set; }
-        public string fieldOptionText { get; set; }
     }
 }

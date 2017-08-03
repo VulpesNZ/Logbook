@@ -50,6 +50,9 @@
     <Compile Include="DTO\Announcement.cs" />
     <Compile Include="DTO\AnnouncementPreview.cs" />
     <Compile Include="DTO\EntryFromApp.cs" />
+    <Compile Include="DTO\FieldForApp.cs" />
+    <Compile Include="DTO\FieldOptionForApp.cs" />
+    <Compile Include="DTO\LogbookForApp.cs" />
     <Compile Include="DTO\LogbookEntryForApp.cs" />
     <Compile Include="DTO\CustomFieldValueForApp.cs" />
     <Compile Include="DTO\SelectedFieldOptionForApp.cs" />

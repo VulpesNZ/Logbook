@@ -8,22 +8,13 @@ namespace Logbook.Core.DTO
 {
     public class LogbookEntryForAppDTO
     {
-        public Guid LogbookEntryId { get; set; }
-        public Guid entryId => LogbookEntryId;
+        public Guid logbookEntryId { get; set; }
         public Guid logbookId { get; set; }
-        public Guid createdBy { get; set; }
-        public Guid updatedBy { get; set; }
         public Guid activityId { get; set; }
-        public string activityName { get; set; }
-        public DateTime createDate { get; set; }
-        public DateTime updateDate { get; set; }
-        public string status { get; set; }
         public DateTime date { get; set; }
-        public string formattedDate { get; set; }
         public string notes { get; set; }
-        public LogbookEntryFieldDTO[] entryFields { get; set; }
+        public string syncStatus { get; set; }
         public SelectedFieldOptionForAppDTO[] selectedFieldOptions { get; set; }
         public CustomFieldValueForApp[] fieldCustomValues { get; set; }
-        public string syncStatus { get; set; }
     }
 }

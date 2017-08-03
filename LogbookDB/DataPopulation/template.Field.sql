@@ -7,7 +7,7 @@ INSERT INTO @Field (FieldId, ActivityId, Name, IsRequired, IsMultiSelect, AllowF
 INSERT INTO @Field (FieldId, ActivityId, Name, IsRequired, IsMultiSelect, AllowFreeText) VALUES ('67C38008-CA39-4A9C-AAAE-0287D9A84EFB', '294A5142-0CD7-4C91-A8FF-B17E3E790CC7', 'Wind', 1, 0, 1)
 INSERT INTO @Field (FieldId, ActivityId, Name, IsRequired, IsMultiSelect, AllowFreeText) VALUES ('47589792-E642-4E5E-BA25-45EF5F04CD7D', '294A5142-0CD7-4C91-A8FF-B17E3E790CC7', 'Rain', 1, 0, 1)
 INSERT INTO @Field (FieldId, ActivityId, Name, IsRequired, IsMultiSelect, AllowFreeText) VALUES ('CC3F67CB-5415-4997-94A3-88C3CB4CE2D1', '294A5142-0CD7-4C91-A8FF-B17E3E790CC7', 'Visibility', 1, 0, 1)
-INSERT INTO @Field (FieldId, ActivityId, Name, IsRequired, IsMultiSelect, AllowFreeText) VALUES ('DB2CB21A-316C-4357-8265-E603B9C60AAA', '294A5142-0CD7-4C91-A8FF-B17E3E790CC7', 'Size of Group', 1, 0, 1)
+INSERT INTO @Field (FieldId, ActivityId, Name, IsRequired, IsMultiSelect, AllowFreeText) VALUES ('DB2CB21A-316C-4357-8265-E603B9C60AAA', '294A5142-0CD7-4C91-A8FF-B17E3E790CC7', 'Group Size', 1, 0, 1)
 
 MERGE template.Field AS Target
 USING @Field AS Source
