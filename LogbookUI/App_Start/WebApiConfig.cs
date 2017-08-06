@@ -30,11 +30,6 @@ namespace LogbookUI
                 defaults: new { controller = "Api", action = "Ping" }
             );
             config.Routes.MapHttpRoute(
-                name: "CreateEntry",
-                routeTemplate: "api/CreateEntry/",
-                defaults: new { controller = "Api", action = "CreateEntry" }
-            );
-            config.Routes.MapHttpRoute(
                 name: "GetEntries",
                 routeTemplate: "api/getentries/{userId}",
                 defaults: new { controller = "Api", action = "GetEntries" }
@@ -54,6 +49,18 @@ namespace LogbookUI
                 routeTemplate: "api/login/",
                 defaults: new { controller = "Api", action = "Login" }
             );
+            config.Routes.MapHttpRoute(
+                name: "DeleteEntry",
+                routeTemplate: "api/deleteentry/{entryId}",
+                defaults: new { controller = "Api", action = "DeleteEntry" }
+            );
+            config.Routes.MapHttpRoute(
+                name: "Upload",
+                routeTemplate: "api/upload/{userId}",
+                defaults: new { controller = "Api", action = "SyncAll" }
+            );
+
+
 
 
             config.Routes.MapHttpRoute(

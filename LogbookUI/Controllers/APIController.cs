@@ -68,14 +68,14 @@ namespace LogbookUI.Controllers
 
         [System.Web.Mvc.AllowAnonymous]
         [System.Web.Http.HttpPost]
-        public string Login([FromBody]UserData userInfo)
+        public string Login([FromBody] UserData userInfo)
         {
             var user = DataAccess.GetUser(userInfo.Username);
             if (user == null)
             {
                 return null;
             }
-                
+
             var pbkdf2 = new Rfc2898DeriveBytes(userInfo.Password, user.PasswordSalt, 1000);
             var providedHash = pbkdf2.GetBytes(32);
             var passwordCorrect = true;
@@ -89,32 +89,25 @@ namespace LogbookUI.Controllers
 
             return passwordCorrect ? user.UserId.ToString() : null;
         }
+        
 
         [System.Web.Mvc.AllowAnonymous]
         [System.Web.Http.HttpPost]
-        public bool CreateEntry([FromBody]EntryFromAppJSON entry)
+        public bool DeleteEntry([FromBody] EntryFromAppJSON entry)
         {
-            var entryDTO = GetDTOFromAppEntry(entry.userId, entry);
-
             var existingEntry = DataAccess.GetLogbookEntry(entry.entryId);
             if (existingEntry != null)
             {
-                DataAccess.UpdateLogbookEntry(entryDTO);
+                DataAccess.DeleteLogbookEntry(entry.entryId);
             }
-            else
-            {
-                DataAccess.AddLogbookEntry(entryDTO);
-            }
-
-            var createdEntry = DataAccess.GetLogbookEntry(entry.entryId);
-            return createdEntry != null;
+            return true;
         }
 
-        private LogbookEntryDTO GetDTOFromAppEntry(Guid userId, EntryFromAppJSON entry)
+        private LogbookEntryDTO GetDTOFromAppEntry(Guid userId, LogbookEntryForAppDTO entry)
         {
             var entryDTO = new LogbookEntryDTO();
 
-            entryDTO.LogbookEntryId = entry.entryId;
+            entryDTO.LogbookEntryId = entry.logbookEntryId;
 
             entryDTO.EntryDate = entry.date;
             entryDTO.ActivityId = entry.activityId;
@@ -172,10 +165,96 @@ namespace LogbookUI.Controllers
             return entryDTO;
         }
 
+        [System.Web.Mvc.AllowAnonymous]
+        [System.Web.Http.HttpPost]
+        public SyncResponse SyncAll(Guid userId, [FromBody] SyncData syncData)
+        {
+            var errors = new List<string>();
+            var response = new SyncResponse();
+            var success = true;
+            var entryCount = 0;
+            var logbookCount = 0;
+            // Create/update/delete logbook entries
+            // If anything (fields, options, activities) doesn't exist for whatever reason, just remove the offending part if possible.  For missing activities, for now just set to first activity in list.
+            foreach (var entry in syncData.entries)
+            {
+                try
+                {
+                    switch (entry.syncStatus)
+                    {
+                        case "DELETED": DataAccess.DeleteLogbookEntry(entry.logbookEntryId);
+                            break;
+                        case "NEW":
+                        case "UPDATED":
+                            {
+                                var entryLocalDTO = GetDTOFromAppEntry(userId, entry);
+                                if (DataAccess.GetLogbookEntry(entry.logbookEntryId) == null)
+                                {
+                                    DataAccess.AddLogbookEntry(entryLocalDTO);
+                                }
+                                else
+                                {
+                                    DataAccess.UpdateLogbookEntry(entryLocalDTO);
+                                }
+                            }
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    errors.Add($"Failed on entry {entry.logbookEntryId}: {ex.Message}");
+                    success = false;
+                }
+            }
+
+            // Then create/update/delete logbooks
+            // Make sure to only set status to deleted, don't delete anything!
+            foreach (var logbook in syncData.logbooks)
+            {
+                // NYI
+            }
+
+            if (success)
+            {
+                response.message = $"Sync complete. Synced {syncData.entries.Length} entries.";
+                // get the post-sync data to pass to local
+                response.logbooks = GetLogbooksForUser(userId);
+                response.entries = GetEntries(userId);
+                response.activities = GetActivitiesForApp(userId);
+                response.fields = GetFieldsForUser(userId);
+                response.fieldOptions = GetFieldOptionsForUser(userId);
+            }
+            else
+            {
+                response.message =
+                    "Sync failed due to an error.  Please try again in a few minutes.  If this error persists, contact support.";
+            }
+            response.ok = success;
+            return response;
+        }
+
         public class UserData
         {
             public string Username { get; set; }
             public string Password { get; set; }
+        }
+
+        public class SyncData
+        {
+            public LogbookForAppDTO[] logbooks { get; set; }
+            public LogbookEntryForAppDTO[] entries { get; set; }
+        }
+
+        public class SyncResponse
+        {
+            public string[] errors { get; set; }
+            public string message { get; set; }
+            public bool ok { get; set; }
+            public ActivityForAppDTO[] activities { get; set; }
+            public LogbookForAppDTO[] logbooks { get; set; }
+            public LogbookEntryForAppDTO[] entries { get; set; }
+            public FieldForAppDTO[] fields { get; set; }
+            public FieldOptionForAppDTO[] fieldOptions { get; set; }
         }
 
         public string GetFormattedDate(DateTime d)

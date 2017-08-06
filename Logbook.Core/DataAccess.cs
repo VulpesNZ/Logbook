@@ -209,7 +209,7 @@ namespace Logbook.Core
                 return conn.Query<LogbookEntryForAppDTO>("SELECT *, Activity.Name AS ActivityName, EntryDate AS Date FROM LogbookEntry " +
                                                    "JOIN Logbook ON Logbook.LogbookId = LogbookEntry.LogbookId " +
                                                    "JOIN Activity ON Activity.ActivityId = LogbookEntry.ActivityId " +
-                                                   "WHERE Logbook.UserId = @UserId", new { UserId = userId });
+                                                   "WHERE Logbook.UserId = @UserId AND Status = 'STATUS/ACTIVE'", new { UserId = userId });
             }
         }
 
@@ -269,6 +269,14 @@ namespace Logbook.Core
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
             {
                 conn.Execute("UPDATE Field SET Active = 0 WHERE FieldId = @FieldId", new { FieldId = fieldId });
+            }
+        }
+
+        public static void DeleteLogbookEntry(Guid entryId)
+        {
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            {
+                conn.Execute("UPDATE LogbookEntry SET Status = 'STATUS/DELETED' WHERE LogbookEntryId = @EntryId;", new { EntryId = entryId });
             }
         }
 
