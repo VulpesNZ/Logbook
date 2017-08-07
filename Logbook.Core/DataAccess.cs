@@ -206,10 +206,10 @@ namespace Logbook.Core
         {
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
             {
-                return conn.Query<LogbookEntryForAppDTO>("SELECT *, Activity.Name AS ActivityName, EntryDate AS Date FROM LogbookEntry " +
+                return conn.Query<LogbookEntryForAppDTO>("SELECT LogbookEntry.*, Activity.Name AS ActivityName, EntryDate AS Date FROM LogbookEntry " +
                                                    "JOIN Logbook ON Logbook.LogbookId = LogbookEntry.LogbookId " +
                                                    "JOIN Activity ON Activity.ActivityId = LogbookEntry.ActivityId " +
-                                                   "WHERE Logbook.UserId = @UserId AND Status = 'STATUS/ACTIVE'", new { UserId = userId });
+                                                   "WHERE Logbook.UserId = @UserId AND LogbookEntry.Status = 'STATUS/ACTIVE' AND Logbook.Status = 'STATUS/ACTIVE'", new { UserId = userId });
             }
         }
 

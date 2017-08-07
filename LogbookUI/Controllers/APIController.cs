@@ -228,6 +228,7 @@ namespace LogbookUI.Controllers
             {
                 response.message =
                     "Sync failed due to an error.  Please try again in a few minutes.  If this error persists, contact support.";
+                response.errors = errors.ToArray();
             }
             response.ok = success;
             return response;
