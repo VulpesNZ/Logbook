@@ -190,7 +190,7 @@ namespace LogbookUI.Controllers
                                 var entryLocalDTO = GetDTOFromAppEntry(userId, entry);
                                 if (DataAccess.GetLogbookEntry(entry.logbookEntryId) == null)
                                 {
-                                    DataAccess.AddLogbookEntry(entryLocalDTO);
+                                    DataAccess.AddLogbookEntry(entryLocalDTO, userId);
                                 }
                                 else
                                 {
@@ -209,10 +209,10 @@ namespace LogbookUI.Controllers
 
             // Then create/update/delete logbooks
             // Make sure to only set status to deleted, don't delete anything!
-            foreach (var logbook in syncData.logbooks)
-            {
-                // NYI
-            }
+            //foreach (var logbook in syncData.logbooks)
+            //{
+            //    // NYI
+            //}
 
             if (success)
             {

@@ -11,6 +11,7 @@ namespace Logbook.Core.DTO
         public Guid fieldId { get; set; }
         public Guid activityId { get; set; }
         public string name { get; set; }
+        public int sortOrder { get; set; }
         public bool allowFreeText { get; set; }
         public bool isRequired { get; set; }
     }

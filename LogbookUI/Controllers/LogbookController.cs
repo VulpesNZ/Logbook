@@ -116,18 +116,19 @@ namespace LogbookUI.Controllers
         [Authorize]
         public async Task<ActionResult> AddLogbookEntry(EditLogbookEntryViewModel model)
         {
+            var userId = Guid.Parse(User.Identity.GetUserId());
             var logbook = new LogbookEntryDTO();
             logbook.LogbookId = model.LogbookId;
             logbook.ActivityId = model.ActivityId;
             logbook.Status = "STATUS/ACTIVE";
-            logbook.CreatedBy = Guid.Parse(User.Identity.GetUserId());
-            logbook.UpdatedBy = Guid.Parse(User.Identity.GetUserId());
+            logbook.CreatedBy = userId;
+            logbook.UpdatedBy = userId;
             logbook.CreateDate = DateTime.Now;
             logbook.UpdateDate = DateTime.Now;
             logbook.EntryDate = model.EntryDate;
             logbook.Notes = model.Notes;
             logbook.EntryFields = model.LogbookEntryFields ?? new LogbookEntryFieldDTO[0];
-            DataAccess.AddLogbookEntry(logbook);
+            DataAccess.AddLogbookEntry(logbook, userId);
             if (logbook.LogbookEntryId == Guid.Empty)
             {
                 ModelState.AddModelError("", "Failed to create entry");

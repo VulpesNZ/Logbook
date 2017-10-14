@@ -14,5 +14,6 @@
     CONSTRAINT [FK_Logbook_IndustryId] FOREIGN KEY ([IndustryId]) REFERENCES [Industry]([IndustryId]),  
     CONSTRAINT [FK_Logbook_CreatedByUser] FOREIGN KEY ([CreatedBy]) REFERENCES [User]([UserId]), 
     CONSTRAINT [FK_Logbook_UpdatedByUser] FOREIGN KEY ([UpdatedBy]) REFERENCES [User]([UserId]), 
-    CONSTRAINT [FK_Logbook_DefaultActivityId] FOREIGN KEY ([DefaultActivityId]) REFERENCES [Activity]([ActivityId])
+    CONSTRAINT [FK_Logbook_DefaultActivityId] FOREIGN KEY ([DefaultActivityId]) REFERENCES [Activity]([ActivityId]), 
+    CONSTRAINT [CK_Logbook_Status] CHECK (Status IN ('STATUS/ACTIVE', 'STATUS/INACTIVE', 'STATUS/DELETED'))
 )

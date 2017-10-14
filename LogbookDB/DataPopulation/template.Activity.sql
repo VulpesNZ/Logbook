@@ -9,7 +9,7 @@ INSERT INTO @Activity (ActivityId, Name, Description, ImageUrl) VALUES ('563A9A6
 INSERT INTO @Activity (ActivityId, Name, Description, ImageUrl) VALUES ('E2F4895E-4AD7-41F4-AEE9-A8BA099F0767', 'Rock Climbing', NULL,NULL)
 INSERT INTO @Activity (ActivityId, Name, Description, ImageUrl) VALUES ('294A5142-0CD7-4C91-A8FF-B17E3E790CC7', 'Sea Kayaking', NULL,NULL)
 INSERT INTO @Activity (ActivityId, Name, Description, ImageUrl) VALUES ('3162E951-75F0-4A40-B072-C50CA7922888', 'Alpine', NULL,NULL)
-INSERT INTO @Activity (ActivityId, Name, Description, ImageUrl) VALUES ('FF0B3D69-41C2-4282-B263-DE456DDF927B', 'Rafting', NULL,NULL)
+INSERT INTO @Activity (ActivityId, Name, Description, ImageUrl) VALUES ('FF0B3D69-41C2-4282-B263-DE456DDF927B', 'White-water Rafting', NULL,NULL)
 
 MERGE template.Activity AS Target
 USING @Activity AS Source

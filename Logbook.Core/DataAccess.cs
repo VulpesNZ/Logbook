@@ -112,7 +112,7 @@ namespace Logbook.Core
             }
         }
 
-        public static void CreateLogbook(LogbookDTO logbook)
+        public static Guid CreateLogbook(LogbookDTO logbook)
         {
             logbook.LogbookId = Guid.NewGuid();
 
@@ -123,6 +123,7 @@ namespace Logbook.Core
                                 "VALUES (@LogbookId, @UserId, @Name, @DefaultActivityId, @CreatedBy, @UpdatedBy, @Status)",
                     logbook);
             }
+            return logbook.LogbookId;
         }
 
         public static LogbookDTO GetLogbook(Guid logbookId)
@@ -170,17 +171,45 @@ namespace Logbook.Core
             }
         }
 
-        public static void AddLogbookEntry(LogbookEntryDTO logbook)
+        public static void AddLogbookEntry(LogbookEntryDTO entry, Guid userId)
         {
-            logbook.LogbookEntryId = Guid.NewGuid();
+            entry.LogbookEntryId = Guid.NewGuid();
 
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
             {
+                // if there's no logbook set for this activity, create one (or find an existing one with the same activity)
+                
+                if (entry.LogbookId == Guid.Empty)
+                {
+                    var logbook = GetLogbooks(userId).FirstOrDefault(l => l.DefaultActivityId == entry.ActivityId);
+                    if (logbook != null)
+                    {
+                        entry.LogbookId = logbook.LogbookId;
+                    }
+                    else
+                    {
+                        var guid =
+                        CreateLogbook(new LogbookDTO()
+                        {
+                            CreateDate = DateTime.Now,
+                            UpdateDate = DateTime.Now,
+                            DefaultActivityId = entry.ActivityId,
+                            Name = GetActivity(entry.ActivityId).Name,
+                            UserId = userId,
+                            CreatedBy = userId,
+                            UpdatedBy = userId,
+                            Status = "STATUS/ACTIVE"
+                        });
+                        entry.LogbookId = guid;
+                    }
+                    
+                }
+
                 var entryId = conn.Query<Guid>("INSERT INTO LogbookEntry (LogbookEntryId, LogbookId, ActivityId, CreatedBy, UpdatedBy, CreateDate, UpdateDate, Status, EntryDate, Notes) " +
                                                "OUTPUT inserted.LogbookEntryId " +
                                                 "VALUES (@LogbookEntryId, @LogbookId, @ActivityId, @CreatedBy, @UpdatedBy, @CreateDate, @UpdateDate, @Status, @EntryDate, @Notes)",
-                    logbook).Single();
-                foreach (var f in logbook.EntryFields)
+                    entry).Single();
+                foreach (var f in entry.EntryFields)
                 {
                     if (f.ActivityFieldOptionMappings != null)
                     {
@@ -249,9 +278,16 @@ namespace Logbook.Core
         {
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
             {
-                var s = "SELECT * FROM Activity WHERE UserId = @UserId";
+                var s =
+                    "SELECT		 ActivityId, UserId, Name, Description, ImageURL, Active, TemplateActivityId " +
+                    "FROM        Activity " +
+                    "LEFT JOIN   LogbookEntry ON LogbookEntry.ActivityId = Activity.ActivityId " +
+                    "WHERE       Activity.UserId = @UserId ";
                 if (activeOnly)
-                    s += " AND Active = 1";
+                    s += " AND Active = 1 ";
+                    s +=
+                    "GROUP BY    Activity.ActivityId, Activity.UserId, Activity.Name, Activity.Description, Activity.ImageURL, Activity.Active, Activity.TemplateActivityId " +
+                    "ORDER BY    SUM(CASE WHEN LogbookEntry.ActivityId IS NULL THEN 0 ELSE 1 END) DESC, Name ASC";
                 return conn.Query<ActivityDTO>(s, new { UserId = userId });
             }
         }
