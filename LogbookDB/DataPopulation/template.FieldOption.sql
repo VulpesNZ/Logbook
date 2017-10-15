@@ -8,7 +8,7 @@ INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUE
 -- Sea Kayaking - Role
 INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('9B355A37-63A2-4FB8-808F-702E9BA4509D', '9A438E88-0748-4D75-BA88-D1C01FED031E', 'Personal', 1, 1)
 INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('E42205CF-B3E2-4B86-93FF-104812162492', '9A438E88-0748-4D75-BA88-D1C01FED031E', 'Guide', 2, 1)
-INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('2D151FB0-E9F6-4200-8FC4-C6DBE3EDC620', '9A438E88-0748-4D75-BA88-D1C01FED031E', 'Teacher/Instructor', 3, 1)
+INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('2D151FB0-E9F6-4200-8FC4-C6DBE3EDC620', '9A438E88-0748-4D75-BA88-D1C01FED031E', 'Instructor', 3, 1)
 INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('4E2FEC21-128E-40FA-963E-52AF511F064C', '9A438E88-0748-4D75-BA88-D1C01FED031E', 'Assessor', 4, 1)
 -- Sea Kayaking - Wind
 INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('274C0DC7-E2D6-4016-9C89-21235033C47B', '67C38008-CA39-4A9C-AAAE-0287D9A84EFB', '0-10 kts', 1, 1)
@@ -35,7 +35,7 @@ INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUE
 -- White-water Kayaking - Role
 INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('8F9A76F2-B0F5-38AA-4A0D-743878E6EC96', 'ED117A40-E0AA-2998-4CC2-D6F192EA0F64', 'Personal', 1, 1)
 INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('54F40DEB-7E9D-F494-41A8-428642C43F3C', 'ED117A40-E0AA-2998-4CC2-D6F192EA0F64', 'Guide', 2, 1)
-INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('18F3B053-D69A-ADB8-4F95-82C4C0A6AAB9', 'ED117A40-E0AA-2998-4CC2-D6F192EA0F64', 'Teacher/Instructor', 3, 1)
+INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('18F3B053-D69A-ADB8-4F95-82C4C0A6AAB9', 'ED117A40-E0AA-2998-4CC2-D6F192EA0F64', 'Instructor', 3, 1)
 INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('41C4F66A-614D-01A2-4680-512ADC372B25', 'ED117A40-E0AA-2998-4CC2-D6F192EA0F64', 'Assessor', 4, 1)
 -- White-water Kayaking - Rain
 INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('E5C78B9E-8F50-D5A1-475B-13F68840F3C6', '7E9ACB9C-E36B-769F-4311-C1CB88ED319A', 'None', 1, 1)
@@ -55,7 +55,7 @@ INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUE
 -- White-water Rafting - Role
 INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('19E3383C-79E3-CCAA-4693-86B62A3FA797', '7F60A5D7-AF6F-E585-4BE5-C7E0D2ED7906', 'Personal', 1, 1)
 INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('0383D729-E4BD-A792-489B-CDE6ECE64BC6', '7F60A5D7-AF6F-E585-4BE5-C7E0D2ED7906', 'Guide', 2, 1)
-INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('63E80E79-02A3-ECA0-46A1-6B2581FCD759', '7F60A5D7-AF6F-E585-4BE5-C7E0D2ED7906', 'Teacher/Instructor', 3, 1)
+INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('63E80E79-02A3-ECA0-46A1-6B2581FCD759', '7F60A5D7-AF6F-E585-4BE5-C7E0D2ED7906', 'Instructor', 3, 1)
 INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('4E869638-41E8-ADBE-4D7D-807B9F3B8DA7', '7F60A5D7-AF6F-E585-4BE5-C7E0D2ED7906', 'Assessor', 4, 1)
 -- White-water Rafting - Rain
 INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('64E26253-70EA-48B9-468B-5D2166AFE5D4', '19938EE0-2616-6A97-47DA-16A80A1F55FC', 'None', 1, 1)
@@ -73,7 +73,7 @@ INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUE
 -- Tramping (Sub-Alpine) - Role
 INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('A862EE47-F9BC-0AB4-4CA3-41F9308E90EF', '7CFDC1F2-CD6E-9CA7-46BC-1F21D96D8094', 'Personal', 1, 1)
 INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('7C78BDEE-6D41-2D84-4FE6-D65EA767E914', '7CFDC1F2-CD6E-9CA7-46BC-1F21D96D8094', 'Guide', 2, 1)
-INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('A319E139-A561-17A4-4D7A-68FDF699DFB1', '7CFDC1F2-CD6E-9CA7-46BC-1F21D96D8094', 'Teacher/Instructor', 3, 1)
+INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('A319E139-A561-17A4-4D7A-68FDF699DFB1', '7CFDC1F2-CD6E-9CA7-46BC-1F21D96D8094', 'Instructor', 3, 1)
 INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('597D3239-8B25-66A0-4CB4-CE750A32AE77', '7CFDC1F2-CD6E-9CA7-46BC-1F21D96D8094', 'Assessor', 4, 1)
 -- Tramping (Sub-Alpine) - Wind
 INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('8B07C704-F064-1EBA-412B-60F4921C2545', '95B7C227-9E0B-69B0-4C7A-3B2CD921B0FE', '0-20 km/h', 1, 1)
@@ -99,7 +99,7 @@ INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUE
 -- Alpine - Role
 INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('EEC9D169-6DFA-D8B9-40CD-FFBA8B234BDA', '726424F3-7225-3A85-4AC5-699F67D01213', 'Personal', 1, 1)
 INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('9D1B28A9-5B7E-1E86-4428-75DB32F5308D', '726424F3-7225-3A85-4AC5-699F67D01213', 'Guide', 2, 1)
-INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('9B290348-BA6C-9CBF-4B10-0D958F7AA307', '726424F3-7225-3A85-4AC5-699F67D01213', 'Teacher/Instructor', 3, 1)
+INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('9B290348-BA6C-9CBF-4B10-0D958F7AA307', '726424F3-7225-3A85-4AC5-699F67D01213', 'Instructor', 3, 1)
 INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('856D1616-2B46-5A8C-4495-BA4ABD5E2CE5', '726424F3-7225-3A85-4AC5-699F67D01213', 'Assessor', 4, 1)
 -- Alpine - Wind
 INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('5BE2DA9B-F444-33A9-4524-AB017B086D82', '143D81DB-82C7-2B89-4D0D-9FFD8B75D755', '0-20 km/h', 1, 1)
@@ -135,7 +135,7 @@ INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUE
 -- Rock Climbing - Role
 INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('C2109EFF-532E-DDB0-4BBD-86DE779B5971', '67A11B67-2305-BBAE-4A9D-35B349FD001F', 'Personal', 1, 1)
 INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('DA44BF99-BF24-C7AD-4968-72A6C7C8C318', '67A11B67-2305-BBAE-4A9D-35B349FD001F', 'Guide', 2, 1)
-INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('E2220DE5-912E-3A99-40A9-A46ED682AECE', '67A11B67-2305-BBAE-4A9D-35B349FD001F', 'Teacher/Instructor', 3, 1)
+INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('E2220DE5-912E-3A99-40A9-A46ED682AECE', '67A11B67-2305-BBAE-4A9D-35B349FD001F', 'Instructor', 3, 1)
 INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('09CD0EDD-2629-E2B1-49D6-B4597E1BD3B2', '67A11B67-2305-BBAE-4A9D-35B349FD001F', 'Assessor', 4, 1)
 -- Rock Climbing - Rain
 INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('BF592973-AF71-FBB2-43E6-658493F0B978', '19938EE0-2616-6A97-47DA-16A80A1F55FC', 'None', 1, 1)
@@ -144,6 +144,31 @@ INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUE
 INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('0E464D90-973B-F19A-43B4-674FB5E027C1', '19938EE0-2616-6A97-47DA-16A80A1F55FC', 'Heavy Rain', 4, 1)
 
 
+-- Mountain Biking - Duration
+INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('B0C30FB0-11E8-3F95-4F9E-03A9DFF25CEE', 'D5998ECA-1380-9A8D-4718-862663E89087', '< 1 hr', 1, 1)
+INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('CE129D58-7AFD-5584-48F0-4EE01D274A1B', 'D5998ECA-1380-9A8D-4718-862663E89087', '1-4 hrs (half day)', 2, 1)
+INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('855D7770-C76D-D08C-4098-677708274559', 'D5998ECA-1380-9A8D-4718-862663E89087', '5-8 hrs (full day)', 3, 1)
+INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('AEFE6380-3985-1F90-4DAE-88AB2255D6D7', 'D5998ECA-1380-9A8D-4718-862663E89087', '> 8 hrs', 4, 1)
+INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('C0F197A8-67D0-9F83-4047-9EBE3BC068B8', 'D5998ECA-1380-9A8D-4718-862663E89087', 'Multi-day', 5, 1)
+-- Mountain Biking - Role
+INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('E44C663B-8C22-AE91-4290-777002B2640A', 'A803AD46-3D60-A3B9-4922-1FCCFA66FCB1', 'Personal', 1, 1)
+INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('AD962702-89BD-D5BA-44F2-AA4AF267ECCC', 'A803AD46-3D60-A3B9-4922-1FCCFA66FCB1', 'Guide', 2, 1)
+INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('0BBA7CA1-D175-32B1-48A1-358FD79AB42C', 'A803AD46-3D60-A3B9-4922-1FCCFA66FCB1', 'Instructor', 3, 1)
+INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('650B1F44-F134-3F9C-4439-9225315DB438', 'A803AD46-3D60-A3B9-4922-1FCCFA66FCB1', 'Assessor', 4, 1)
+-- Mountain Biking - Rain
+INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('EF6BB0CC-420A-DB94-4E0B-9A8DE4768154', 'C8C04CAC-4243-9D95-4666-65DAB5E48A39', 'None', 1, 1)
+INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('942F56CF-7B01-8C8D-464E-61E5F17A63DE', 'C8C04CAC-4243-9D95-4666-65DAB5E48A39', 'Showers', 2, 1)
+INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('22AE99B9-E5FE-839A-4352-EF77D237375C', 'C8C04CAC-4243-9D95-4666-65DAB5E48A39', 'Light Rain', 3, 1)
+INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('94134576-CEEC-6798-4B47-8D40A13CEB23', 'C8C04CAC-4243-9D95-4666-65DAB5E48A39', 'Heavy Rain', 4, 1)
+-- Mountain Biking - Track Type
+INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('EA8D98F6-9139-439D-49F8-4243683C121D', '5E9E8BC6-87E7-49A6-46D8-F00FE4941423', 'Road', 1, 1)
+INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('82F1B9FD-C984-75AC-4ED1-5D15C04C9AB9', '5E9E8BC6-87E7-49A6-46D8-F00FE4941423', 'Gravel Road', 2, 1)
+INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('A114BF6C-4A34-E5BD-4AE7-A0DD0140CFCF', '5E9E8BC6-87E7-49A6-46D8-F00FE4941423', 'Single Track (Cross Country)', 3, 1)
+INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('30A65D97-0494-27B0-4F90-1E6B036DEF4E', '5E9E8BC6-87E7-49A6-46D8-F00FE4941423', 'Single Track (Downhill)', 4, 1)
+-- Mountain Biking - Track Conditions
+INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('E6530AE6-DAE9-07A9-433F-B998147A538E', '4FBF05FB-7E50-E191-41A6-5FFBC93738CE', 'Dry', 1, 1)
+INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('FF3E8A58-D688-D090-4A8C-D9C66DE38DAC', '4FBF05FB-7E50-E191-41A6-5FFBC93738CE', 'Moist', 2, 1)
+INSERT INTO @FieldOption (FieldOptionId, FieldId, Text, SortOrder, Active) VALUES ('A6349DC1-B0F8-6682-4053-11195BBB4E7C', '4FBF05FB-7E50-E191-41A6-5FFBC93738CE', 'Wet', 3, 1)
 
 
 
