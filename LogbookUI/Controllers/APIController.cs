@@ -124,27 +124,30 @@ namespace LogbookUI.Controllers
             {
                 var dbField = DataAccess.GetField(field.fieldId);
                 var dbFieldOption = DataAccess.GetFieldOption(field.fieldOptionId);
-                var fieldOptionMappings = new List<ActivityFieldOptionMapping>
+                if (dbFieldOption != null)
                 {
-                    new ActivityFieldOptionMapping()
+                    var fieldOptionMappings = new List<ActivityFieldOptionMapping>
                     {
+                        new ActivityFieldOptionMapping()
+                        {
+                            FieldId = dbField.FieldId,
+                            ActivityId = dbField.ActivityId,
+                            FieldOptionId = field.fieldOptionId,
+                            FieldName = dbField.Name,
+                            OptionText = dbFieldOption.Text,
+                            Selected = true
+                        }
+                    };
+                    fieldOptionsToSave.Add(new LogbookEntryFieldDTO()
+                    {
+                        Name = dbField.Name,
                         FieldId = dbField.FieldId,
-                        ActivityId = dbField.ActivityId,
-                        FieldOptionId = field.fieldOptionId,
-                        FieldName = dbField.Name,
-                        OptionText = dbFieldOption.Text,
-                        Selected = true
-                    }
-                };
-                fieldOptionsToSave.Add(new LogbookEntryFieldDTO()
-                {
-                    Name = dbField.Name,
-                    FieldId = dbField.FieldId,
-                    LogbookId = entry.logbookId,
-                    Active = true,
-                    ActivityId = entry.activityId,
-                    ActivityFieldOptionMappings = fieldOptionMappings.ToArray()
-                });
+                        LogbookId = entry.logbookId,
+                        Active = true,
+                        ActivityId = entry.activityId,
+                        ActivityFieldOptionMappings = fieldOptionMappings.ToArray()
+                    });
+                }
             }
             foreach (var field in entry.fieldCustomValues)
             {
@@ -163,6 +166,30 @@ namespace LogbookUI.Controllers
             entryDTO.EntryFields = fieldOptionsToSave.ToArray();
 
             return entryDTO;
+        }
+
+        [System.Web.Mvc.AllowAnonymous]
+        [System.Web.Http.HttpPost]
+        public ExportResponse Export([FromBody] ExportRequest request)
+        {
+            var response = new ExportResponse();
+            var user = DataAccess.GetUser(request.UserId);
+            var attachmentData = new byte[0];
+            // generate the report
+            switch (request.Format)
+            {
+                case "CSV":
+                    attachmentData = Reporting.GenerateCSVReport(request.ActivityId, request.FromDate, request.ToDate);
+                    break;
+            }
+
+            // email the report
+            Mailer.SendMessage("reporting@theoutdoorlogbook.com", user.Email, "Your report from The Outdoor Logbook", "Test body", attachmentData, $"activity report.{request.Format.ToLower()}");
+
+            // return the result
+            response.Success = true;
+            response.Message = $"Your report has been emailed to {user.Email}.";
+            return response;
         }
 
         [System.Web.Mvc.AllowAnonymous]
@@ -202,7 +229,7 @@ namespace LogbookUI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    errors.Add($"Failed on entry {entry.logbookEntryId}: {ex.Message}");
+                    errors.Add($"Failed on entry {entry.logbookEntryId}: {ex.Message} {ex.StackTrace}");
                     success = false;
                 }
             }
@@ -232,6 +259,21 @@ namespace LogbookUI.Controllers
             }
             response.ok = success;
             return response;
+        }
+
+        public class ExportResponse
+        {
+            public bool Success { get; set; }
+            public string Message { get; set; }
+        }
+
+        public class ExportRequest
+        {
+            public Guid UserId { get; set; }
+            public Guid ActivityId { get; set; }
+            public DateTime FromDate { get; set; }
+            public DateTime ToDate { get; set; }
+            public string Format { get; set; }
         }
 
         public class UserData

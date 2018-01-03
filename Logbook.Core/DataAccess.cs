@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -508,6 +509,24 @@ namespace Logbook.Core
             }
         }
 
-        
+        public static DataTable GetReportData(Guid activityId, DateTime startDate, DateTime endDate)
+        {
+            DataTable table = new DataTable();
+            using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["Local"].ConnectionString))
+            using (var cmd =new SqlCommand("GetReportDataForActivity",con))
+            {
+
+                cmd.Parameters.Add(new SqlParameter("@ActivityId", activityId));
+                cmd.Parameters.Add(new SqlParameter("@StartDate", startDate));
+                cmd.Parameters.Add(new SqlParameter("@EndDate", endDate));
+
+                using (var da = new SqlDataAdapter(cmd))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    da.Fill(table);
+                }
+            }
+            return table;
+        }
     }
 }

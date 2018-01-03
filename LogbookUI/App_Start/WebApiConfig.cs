@@ -59,6 +59,11 @@ namespace LogbookUI
                 routeTemplate: "api/upload/{userId}",
                 defaults: new { controller = "Api", action = "SyncAll" }
             );
+            config.Routes.MapHttpRoute(
+                name: "Export",
+                routeTemplate: "api/export/",
+                defaults: new { controller = "Api", action = "Export" }
+            );
 
 
 

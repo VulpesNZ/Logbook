@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Text;
@@ -18,11 +19,7 @@ namespace Logbook.Core
                 if (_smtpClient == null)
                 {
 #if DEBUG
-                    _smtpClient = new SmtpClient
-                    {
-                        Host = "localhost",
-                        Port = 25
-                    };
+                    _smtpClient = new SmtpClient();
 #endif
                 }
                 return _smtpClient;
@@ -33,7 +30,7 @@ namespace Logbook.Core
         {
         }
 
-        public static bool SendMessage(string fromAddress, string toAddress, string subject, string body)
+        public static bool SendMessage(string fromAddress, string toAddress, string subject, string body, byte[] attachment = null, string attachmentFilename = null)
         {
             try
             {
@@ -42,6 +39,9 @@ namespace Logbook.Core
                 msg.From = new MailAddress(fromAddress);
                 msg.Subject = subject;
                 msg.Body = body;
+                
+                if (attachment != null)
+                    msg.Attachments.Add(new Attachment(new MemoryStream(attachment), attachmentFilename));
                 SmtpClient.Send(msg);
             }
             catch (Exception)

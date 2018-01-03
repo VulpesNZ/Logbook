@@ -91,6 +91,7 @@
     <Build Include="StoredProcedures\SelectFieldOption.sql" />
     <Build Include="StoredProcedures\SetFieldCustomText.sql" />
     <Build Include="StoredProcedures\GetActivitiesForApp.sql" />
+    <Build Include="StoredProcedures\GetReportDataForActivity.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="LogbookDB.refactorlog" />
